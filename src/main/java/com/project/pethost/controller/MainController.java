@@ -62,7 +62,7 @@ public class MainController extends WebMvcConfigurationSupport {
 
 
         final Person p = new Person();
-        p.setName(name);
+        p.setName(name); 
         p.setSurname(surname);
         p.setPatronymic(patronymic);
         p.setGender(gender);
