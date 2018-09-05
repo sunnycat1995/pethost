@@ -1,6 +1,6 @@
 package com.project.pethost.service;
 
-import com.project.pethost.model.Person;
+import com.project.pethost.dbo.UserDbo;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -13,7 +13,7 @@ public class PasswordMatchesValidator
     }
     @Override
     public boolean isValid(final Object obj, final ConstraintValidatorContext context){
-        final Person user = (Person) obj;
+        final UserDbo user = (UserDbo) obj;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

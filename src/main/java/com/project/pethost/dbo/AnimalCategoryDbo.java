@@ -1,4 +1,4 @@
-package com.project.pethost.model;
+package com.project.pethost.dbo;
 
 
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Getter
 @Entity
 @Table(name = "animal_category")
-public enum AnimalCategory {
+public enum AnimalCategoryDbo {
     CAT(1, "cat"),
     DOG(2, "dog"),
     FISH(3, "fish"),
@@ -23,5 +23,5 @@ public enum AnimalCategory {
 
     @Id
     private Integer id;
-    private String name;
+    private String category;
 }

@@ -1,7 +1,7 @@
 package com.project.pethost.repository;
 
-import com.project.pethost.model.Pet;
+import com.project.pethost.dbo.PetDbo;
 import org.springframework.data.repository.CrudRepository;
 
-public interface PetRepository extends CrudRepository<Pet, Long> {
+public interface PetRepository extends CrudRepository<PetDbo, Long> {
 }

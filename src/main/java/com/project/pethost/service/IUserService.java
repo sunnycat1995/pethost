@@ -1,9 +1,9 @@
 package com.project.pethost.service;
 
 import com.project.pethost.exception.EmailExistsException;
-import com.project.pethost.model.Person;
+import com.project.pethost.dbo.UserDbo;
 
 public interface IUserService {
-    Person registerNewUserAccount(final Person accountDto)
+    UserDbo registerNewUserAccount(final UserDbo accountDto)
             throws EmailExistsException;
 }

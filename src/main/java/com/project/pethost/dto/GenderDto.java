@@ -1,10 +1,10 @@
-package com.project.pethost.model;
+package com.project.pethost.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Gender {
+public enum GenderDto {
     female, male;
 }

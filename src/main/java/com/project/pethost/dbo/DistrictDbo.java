@@ -1,4 +1,4 @@
-package com.project.pethost.model;
+package com.project.pethost.dbo;
 
 import lombok.Data;
 
@@ -11,10 +11,10 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "district")
-public class District {
+public class DistrictDbo {
     @Id
     private Long id;
     @OneToOne(cascade = CascadeType.ALL)
-    private City city;
+    private CityDbo city;
     private String name;
 }

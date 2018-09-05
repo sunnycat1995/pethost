@@ -1,7 +1,7 @@
 package com.project.pethost.service;
 
 import com.project.pethost.exception.EmailExistsException;
-import com.project.pethost.model.Person;
+import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class PersonService implements IUserService {
 
     @Transactional
     @Override
-    public Person registerNewUserAccount(Person accountDto)
+    public UserDbo registerNewUserAccount(UserDbo accountDto)
             throws EmailExistsException {
 
         if (emailExist(accountDto.getEmail())) {
@@ -25,7 +25,7 @@ public class PersonService implements IUserService {
     }
 
     private boolean emailExist(String email) {
-        final Person user = repository.findByEmail(email);
+        final UserDbo user = repository.findByEmail(email);
         if (user != null) {
             return true;
         }

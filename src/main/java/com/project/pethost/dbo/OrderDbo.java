@@ -1,4 +1,4 @@
-package com.project.pethost.model;
+package com.project.pethost.dbo;
 
 import lombok.Data;
 
@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Table(name = "order")
-public class Order {
+public class OrderDbo {
     private Long id;
-    private Person keeper;
-    private OrderStatus status;
-    private Pet pet;
+    private UserDbo keeper;
+    private OrderStatusDbo status;
+    private PetDbo pet;
     private LocalDateTime createdDate;
     private LocalDateTime bookingDate;
     private LocalDateTime lastModifiedDate;

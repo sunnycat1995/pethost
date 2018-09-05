@@ -1,6 +1,6 @@
 package com.project.pethost.validator;
 
-import com.project.pethost.model.Person;
+import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,12 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return Person.class.equals(aClass);
+        return UserDbo.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        final Person user = (Person) o;
+        final UserDbo user = (UserDbo) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getName().length() < 6 || user.getName().length() > 32) {

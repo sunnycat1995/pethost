@@ -1,14 +1,20 @@
 package com.project.pethost.converter;
 
-import com.project.pethost.model.Gender;
+import com.project.pethost.dbo.GenderDbo;
 import org.springframework.core.convert.converter.Converter;
 
-public class GenderEnumConverter implements Converter<String, Gender> {
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class GenderEnumConverter implements Converter<String, GenderDbo> {
+    private Logger LOGGER = Logger.getLogger(GenderEnumConverter.class.getName());
+
     @Override
-    public Gender convert(final String source) {
+    public GenderDbo convert(final String source) {
         try {
-            return Gender.valueOf(source);
-        } catch (Exception e) {
+            return GenderDbo.valueOf(source);
+        } catch (final Exception e) {
+            LOGGER.log(Level.SEVERE, "Incorrect gender value " + source);
             return null;
         }
     }

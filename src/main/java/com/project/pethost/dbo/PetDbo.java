@@ -1,4 +1,4 @@
-package com.project.pethost.model;
+package com.project.pethost.dbo;
 
 import lombok.Data;
 
@@ -13,19 +13,21 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "pet")
-public class Pet {
+public class PetDbo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private LocalDate birthdate;
 
-    private AnimalCategory category;
+    private AnimalCategoryDbo category;
 
-    @OneToOne(targetEntity = Person.class)
-    private Person owner;
-    @OneToOne(targetEntity = Person.class)
-    private Person keeper;
+    @OneToOne(targetEntity = UserDbo.class)
+    private UserDbo owner;
+    @OneToOne(targetEntity = UserDbo.class)
+    private UserDbo keeper;
 
     private Double rating;
+
+    private String description;
 }

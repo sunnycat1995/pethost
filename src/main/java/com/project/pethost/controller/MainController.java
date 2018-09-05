@@ -1,9 +1,9 @@
 package com.project.pethost.controller;
 
 import com.project.pethost.converter.GenderEnumConverter;
+import com.project.pethost.dbo.GenderDbo;
+import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.exception.EmailExistsException;
-import com.project.pethost.model.Gender;
-import com.project.pethost.model.Person;
 import com.project.pethost.repository.PersonRepository;
 import com.project.pethost.repository.PetRepository;
 import com.project.pethost.service.PersonService;
@@ -13,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -43,7 +41,7 @@ public class MainController extends WebMvcConfigurationSupport {
     public @ResponseBody String addNewPerson(@RequestParam final String name,
                                              @RequestParam final String surname,
                                              @RequestParam(required = false) final String patronymic,
-                                             @RequestParam(name = "gender") Gender gender,
+                                             @RequestParam(name = "gender") GenderDbo gender,
 
                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                              @RequestParam(required = false) final LocalDate birthdate,
@@ -61,7 +59,7 @@ public class MainController extends WebMvcConfigurationSupport {
         // @RequestParam means it is a parameter from the GET or POST request
 
 
-        final Person p = new Person();
+        final UserDbo p = new UserDbo();
         p.setName(name); 
         p.setSurname(surname);
         p.setPatronymic(patronymic);
@@ -83,7 +81,7 @@ public class MainController extends WebMvcConfigurationSupport {
         return "Saved";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(final Model model, final String error, final String logout) {
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
@@ -92,7 +90,7 @@ public class MainController extends WebMvcConfigurationSupport {
             model.addAttribute("message", "You have been logged out successfully.");
 
         return "login";
-    }
+    }*/
 
     @Override
     public FormattingConversionService mvcConversionService() {
@@ -114,7 +112,7 @@ public class MainController extends WebMvcConfigurationSupport {
     }
 */
     @GetMapping(path = "/allUsers")
-    public @ResponseBody Iterable<Person> getAllUsers() {
+    public @ResponseBody Iterable<UserDbo> getAllUsers() {
         // This returns a JSON or XML with the users
         return personRepository.findAll();
     }
@@ -130,7 +128,7 @@ public class MainController extends WebMvcConfigurationSupport {
 
         /searchPersonsByInterests
 
-        /registerUser(create new Person)
+        /registerUser(create new User)
 
         /logIn
 
