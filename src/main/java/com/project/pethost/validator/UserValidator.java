@@ -1,7 +1,7 @@
 package com.project.pethost.validator;
 
 import com.project.pethost.dbo.UserDbo;
-import com.project.pethost.repository.PersonRepository;
+import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator {
     @Autowired
-    private PersonRepository personRepository;
+    private UserRepository personRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {

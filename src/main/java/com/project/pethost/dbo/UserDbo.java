@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.pethost.service.PasswordMatches;
 import com.project.pethost.service.ValidEmail;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -29,6 +30,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @PasswordMatches
+@NoArgsConstructor
 public class UserDbo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,11 +76,23 @@ public class UserDbo {
 
     private Double rating;
 
+    private Boolean enabled;
+
     @Column
     @ElementCollection(targetClass = String.class)
     @JsonIgnore
     @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"))
     private List<AnimalCategoryDbo> animalCategoryPreference;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<PetDbo> pets;
+
+    public UserDbo(final Long userId, final String userName, final String encrytedPassword) {
+        this.id = userId;
+        this.email = userName;
+        this.password = encrytedPassword;
+    }
+
+    /*@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id"))
+    private UserRoleType role;*/
 }

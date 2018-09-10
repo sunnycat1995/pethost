@@ -28,6 +28,24 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_role_table" author="vyshnikova">
+        <createTable tableName="role">
+            <column name="id" type="bigint(3)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="role" type="varchar(20)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_initial_roles" author="vyshnikova">
+        <sql>
+            insert into role(id, role) values
+            (1, "ROLE_SUPER_ADMIN"),
+            (2, "ROLE_ADMIN"),
+            (3, "ROLE_USER")
+        </sql>
+    </changeSet>
+
     <changeSet id="create_user_tables" author="vyshnikova">
         <createTable tableName="user">
             <column name="id" type="bigint(20)" autoIncrement="true">
@@ -39,15 +57,26 @@
             <column name="email" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="varchar(50)">
+            <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="address" type="varchar(255)" />
             <column name="birthdate" type="date" />
             <column name="gender" type="varchar(255)" />
             <column name="rating" type="double" />
-            <column name="city_id" type="bigint(20)" />
-            <column name="district_id" type="bigint(20)" />
+            <column name="enabled" type="boolean" defaultValueBoolean="true" />
+            <column name="city_id" type="bigint(20)">
+                <constraints
+                        referencedTableName="city"
+                        referencedColumnNames="id"
+                        foreignKeyName="city1_fk_city_id"/>
+            </column>
+            <column name="district_id" type="bigint(20)">
+                <constraints
+                        referencedTableName="district"
+                        referencedColumnNames="id"
+                        foreignKeyName="district1_fk_district_id"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="add_initial_users" author="vyshnikova">
@@ -56,7 +85,7 @@
             <column name="surname" value="Vyshnikova" />
             <column name="patronymic" value="Alexandrovna" />
             <column name="email" value="irinavyshnikova@gmail.com" />
-            <column name="password" value="123" />
+            <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq" />
         </insert>
     </changeSet>
 
@@ -98,6 +127,23 @@
             (6, "rodent"),
             (7, "exotics")
         </sql>
+    </changeSet>
+
+    <changeSet id="create_user_role_table" author="vyshnikova">
+        <createTable tableName="user_role">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint(20)" />
+            <column name="role_id" type="bigint(3)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_initial_user_roles" author="vyshnikova">
+        <insert tableName="user_role">
+            <column name="user_id" value="1" />
+            <column name="role_id" value="1" />
+        </insert>
     </changeSet>
 
 

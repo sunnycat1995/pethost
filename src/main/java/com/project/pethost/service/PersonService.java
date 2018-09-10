@@ -2,7 +2,7 @@ package com.project.pethost.service;
 
 import com.project.pethost.exception.EmailExistsException;
 import com.project.pethost.dbo.UserDbo;
-import com.project.pethost.repository.PersonRepository;
+import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PersonService implements IUserService {
     @Autowired
-    private PersonRepository repository;
+    private UserRepository repository;
 
     @Transactional
     @Override

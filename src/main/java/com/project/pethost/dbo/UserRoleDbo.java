@@ -6,11 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
-public class LocationIdType {
+@Table(name = "user_role")
+public class UserRoleDbo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long userId;
+
+    private Long roleId;
 }

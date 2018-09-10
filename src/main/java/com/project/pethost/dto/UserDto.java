@@ -36,6 +36,8 @@ public class UserDto {
 
     private Double rating;
 
+    private Boolean enabled;
+
     private List<AnimalCategoryDto> animalCategoryPreference;
     private List<PetDto> pets;
 }
