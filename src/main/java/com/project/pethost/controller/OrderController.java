@@ -12,8 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(path = "/pethost")
 public class OrderController {
+
+    private final OrderRepository orderRepository;
+
     @Autowired
-    private OrderRepository orderRepository;
+    public OrderController(final OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @GetMapping(path = "/orders")
     public @ResponseBody Iterable<OrderDbo> getAllOrders() {
@@ -21,17 +26,17 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/createOrder", method = RequestMethod.GET)
-    public @ResponseBody String createOrder(){
+    public @ResponseBody String createOrder() {
         return "Added new order";
     }
 
     @RequestMapping(value = "/waitingOrders", method = RequestMethod.GET)
-    public @ResponseBody String waitingOrders(){
+    public @ResponseBody String waitingOrders() {
         return "Returned all waiting orders";
     }
 
     @RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)
-    public @ResponseBody String changeOrderStatus(){
+    public @ResponseBody String changeOrderStatus() {
         return "Changed order status";
     }
 }

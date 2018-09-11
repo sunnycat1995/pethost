@@ -9,7 +9,7 @@
             <column name="id" type="bigint(20)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
         </createTable>
     </changeSet>
 
@@ -18,8 +18,8 @@
             <column name="id" type="bigint(20)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(100)" />
-            <column name="city_id" type="bigint(20)" >
+            <column name="name" type="varchar(100)"/>
+            <column name="city_id" type="bigint(20)">
                 <constraints
                         referencedTableName="city"
                         referencedColumnNames="id"
@@ -33,7 +33,7 @@
             <column name="id" type="bigint(3)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="role" type="varchar(20)" />
+            <column name="role" type="varchar(20)"/>
         </createTable>
     </changeSet>
 
@@ -51,20 +51,20 @@
             <column name="id" type="bigint(20)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
-            <column name="surname" type="varchar(50)" />
-            <column name="patronymic" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
+            <column name="surname" type="varchar(50)"/>
+            <column name="patronymic" type="varchar(50)"/>
             <column name="email" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="address" type="varchar(255)" />
-            <column name="birthdate" type="date" />
-            <column name="gender" type="varchar(255)" />
-            <column name="rating" type="double" />
-            <column name="enabled" type="boolean" defaultValueBoolean="true" />
+            <column name="address" type="varchar(255)"/>
+            <column name="birthdate" type="date"/>
+            <column name="gender" type="varchar(255)"/>
+            <column name="rating" type="double"/>
+            <column name="enabled" type="boolean" defaultValueBoolean="true"/>
             <column name="city_id" type="bigint(20)">
                 <constraints
                         referencedTableName="city"
@@ -81,11 +81,11 @@
     </changeSet>
     <changeSet id="add_initial_users" author="vyshnikova">
         <insert tableName="user">
-            <column name="name" value="Irina" />
-            <column name="surname" value="Vyshnikova" />
-            <column name="patronymic" value="Alexandrovna" />
-            <column name="email" value="irinavyshnikova@gmail.com" />
-            <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq" />
+            <column name="name" value="Irina"/>
+            <column name="surname" value="Vyshnikova"/>
+            <column name="patronymic" value="Alexandrovna"/>
+            <column name="email" value="irinavyshnikova@gmail.com"/>
+            <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq"/>
         </insert>
     </changeSet>
 
@@ -94,7 +94,7 @@
             <column name="id" type="bigint(3)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="status" type="varchar(30)" />
+            <column name="status" type="varchar(30)"/>
         </createTable>
     </changeSet>
     <changeSet id="add_initial_order_statuses" author="vyshnikova">
@@ -113,7 +113,7 @@
             <column name="id" type="bigint(3)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="category" type="varchar(30)" />
+            <column name="category" type="varchar(30)"/>
         </createTable>
     </changeSet>
     <changeSet id="add_initial_animal_categories" author="vyshnikova">
@@ -134,15 +134,15 @@
             <column name="id" type="bigint(20)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="bigint(20)" />
-            <column name="role_id" type="bigint(3)" />
+            <column name="user_id" type="bigint(20)"/>
+            <column name="role_id" type="bigint(3)"/>
         </createTable>
     </changeSet>
 
     <changeSet id="add_initial_user_roles" author="vyshnikova">
         <insert tableName="user_role">
-            <column name="user_id" value="1" />
-            <column name="role_id" value="1" />
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
         </insert>
     </changeSet>
 
@@ -151,13 +151,13 @@
             <column name="id" type="bigint(20)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
             <column name="birthdate" type="date"/>
-            <column name="animal_category_id" type="bigint(3)" />
-            <column name="owner_id" type="bigint(20)" />
-            <column name="keeper_id" type="bigint(20)" />
-            <column name="rating" type="double" />
-            <column name="description" type="varchar(500)" />
+            <column name="animal_category_id" type="bigint(3)"/>
+            <column name="owner_id" type="bigint(20)"/>
+            <column name="keeper_id" type="bigint(20)"/>
+            <column name="rating" type="double"/>
+            <column name="description" type="varchar(500)"/>
         </createTable>
     </changeSet>
 
@@ -188,5 +188,22 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_rating_table" author="vyshnikova">
+        <createTable tableName="rating">
+            <column name="id" type="bigint(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="counter" type="bigint(20)"/>
+            <column name="rating" type="double"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_entry_to_rating_table_for_main_user" author="vyshnikova">
+        <insert tableName="rating">
+            <column name="id" value="1"/>
+            <column name="counter" value="0"/>
+            <column name="rating" value="0"/>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>

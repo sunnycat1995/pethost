@@ -30,14 +30,18 @@ import java.util.stream.StreamSupport;
 @RequestMapping(path = "/pethost")
 public class PetController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PetRepository petRepository;
+    private final AnimalCategoryRepository animalCategoryRepository;
 
     @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private AnimalCategoryRepository animalCategoryRepository;
+    public PetController(final UserRepository userRepository,
+                         final PetRepository petRepository,
+                         final AnimalCategoryRepository animalCategoryRepository) {
+        this.userRepository = userRepository;
+        this.petRepository = petRepository;
+        this.animalCategoryRepository = animalCategoryRepository;
+    }
 
     @GetMapping(path = "/createPet") // Map ONLY GET Requests
     public @ResponseBody String addNewPet(@RequestParam String name,
@@ -90,7 +94,8 @@ public class PetController {
     }
 
     @RequestMapping("/pets")
-    public @ResponseBody Iterable<PetDbo> getAllPets(final Model model, @AuthenticationPrincipal final Principal principal) {
+    public @ResponseBody Iterable<PetDbo> getAllPets(final Model model,
+                                                     @AuthenticationPrincipal final Principal principal) {
         final String userName = principal.getName();
         final UserDbo currentUser = userRepository.findByEmail(userName);
         model.addAttribute("currentUser", currentUser);

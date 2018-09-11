@@ -14,14 +14,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class MainController extends WebMvcConfigurationSupport {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
-
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcomePage(final Model model) {
         model.addAttribute("title", "Welcome");
         model.addAttribute("message", "Welcome to the Pethost page!");
         return "welcomePage";
     }
-
 
     @RequestMapping(value = "/createReview", method = RequestMethod.GET)
     public @ResponseBody String createReview() { //(only by ownerId about keeperId)
