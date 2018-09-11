@@ -146,5 +146,47 @@
         </insert>
     </changeSet>
 
+    <changeSet id="create_pet_table" author="vyshnikova">
+        <createTable tableName="pet">
+            <column name="id" type="bigint(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="birthdate" type="date"/>
+            <column name="animal_category_id" type="bigint(3)" />
+            <column name="owner_id" type="bigint(20)" />
+            <column name="keeper_id" type="bigint(20)" />
+            <column name="rating" type="double" />
+            <column name="description" type="varchar(500)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_order_table" author="vyshnikova">
+        <createTable tableName="order">
+            <column name="id" type="bigint(20)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="keeper_id" type="bigint(20)">
+                <constraints foreignKeyName="user_fk_keeper_id"
+                             referencedColumnNames="id"
+                             referencedTableName="user"/>
+            </column>
+            <column name="status_id" type="bigint(3)">
+                <constraints foreignKeyName="status_fk_status_id"
+                             referencedColumnNames="id"
+                             referencedTableName="order_status"/>
+            </column>
+            <column name="pet_id" type="bigint(20)">
+                <constraints foreignKeyName="pet_fk_pet_id"
+                             referencedColumnNames="id"
+                             referencedTableName="pet"/>
+            </column>
+            <column name="createdDate" type="date"/>
+            <column name="bookingDate" type="date"/>
+            <column name="lastModifiedDate" type="date"/>
+            <column name="comments" type="varchar(500)"/>
+        </createTable>
+    </changeSet>
+
 
 </databaseChangeLog>

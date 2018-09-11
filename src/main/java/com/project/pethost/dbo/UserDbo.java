@@ -86,7 +86,4 @@ public class UserDbo {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<PetDbo> pets;
-
-    /*@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id"))
-    private UserRoleType role;*/
 }
