@@ -20,6 +20,7 @@ public class PetDbo {
     private String name;
     private LocalDate birthdate;
 
+    @OneToOne(targetEntity = AnimalCategoryDbo.class)
     private AnimalCategoryDbo category;
 
     @OneToOne(targetEntity = UserDbo.class)

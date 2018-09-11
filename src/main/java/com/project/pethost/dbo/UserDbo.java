@@ -87,12 +87,6 @@ public class UserDbo {
     @OneToMany(cascade = CascadeType.ALL)
     private List<PetDbo> pets;
 
-    public UserDbo(final Long userId, final String userName, final String encrytedPassword) {
-        this.id = userId;
-        this.email = userName;
-        this.password = encrytedPassword;
-    }
-
     /*@CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "id"))
     private UserRoleType role;*/
 }

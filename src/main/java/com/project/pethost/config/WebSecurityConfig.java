@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')");
 
         // For ADMIN only.
-        http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
+        http.authorizeRequests().antMatchers("/admin").access("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')");
 
         // When the user has logged in as XX.
         // But access a page that requires role YY,
@@ -61,12 +61,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/j_spring_security_check") // Submit URL
                 .loginPage("/login")//
                 .defaultSuccessUrl("/pethost/userAccountInfo")//
-                .failureUrl("/login?error=true")//
+                .failureUrl("/pethost/login?error=true")//
                 .usernameParameter("username")//
                 .passwordParameter("password")
                 // Config for Logout Page
                 //.and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
-                .and().logout().logoutSuccessUrl("/pethost/logoutSuccessful");
+                .and().logout().logoutUrl("/pethost/logout").logoutSuccessUrl("/pethost/logoutSuccessful");
 
     }
 }
