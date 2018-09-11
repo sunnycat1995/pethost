@@ -1,19 +1,18 @@
 package com.project.pethost.dto;
 
-import com.project.pethost.service.PasswordMatches;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@PasswordMatches
+//PasswordMatches
 public class UserDto {
     private Long id;
 
     private String password;
 
-    private String matchingPassword;
+    //private String matchingPassword;
 
     private String name;
 

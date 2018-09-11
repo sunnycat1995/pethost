@@ -1,4 +1,4 @@
-package com.project.pethost.utils;
+package com.project.pethost.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
