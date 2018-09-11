@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // [ROLE_USER, ROLE_ADMIN,..]
         final List<UserRoleDbo> userRoles = this.userRoleRepository.findAllById(appUser.getId());
 
-        final List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        final List<GrantedAuthority> grantList = new ArrayList<>();
         if (userRoles != null) {
             userRoles.forEach(r -> {
                 final RoleDbo roleDbo = this.roleRepository.findAllById(r.getId());
@@ -53,7 +53,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             });
         }
 
-        UserDetails userDetails = (UserDetails) new User(appUser.getEmail(), appUser.getPassword(), grantList);
+        final UserDetails userDetails = (UserDetails) new User(appUser.getEmail(), appUser.getPassword(), grantList);
 
         return userDetails;
     }
