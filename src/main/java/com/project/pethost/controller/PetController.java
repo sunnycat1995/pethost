@@ -10,7 +10,9 @@ import com.project.pethost.repository.AnimalCategoryRepository;
 import com.project.pethost.repository.PetRepository;
 import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,5 +87,14 @@ public class PetController {
     @RequestMapping(value = "/searchWaitingPetsByCategories", method = RequestMethod.GET)
     public @ResponseBody String searchWaitingPetsByCategories() {
         return "Returned all waiting orders filtered by categories";
+    }
+
+    @RequestMapping("/pets")
+    public @ResponseBody Iterable<PetDbo> getAllPets(final Model model, @AuthenticationPrincipal final Principal principal) {
+        final String userName = principal.getName();
+        final UserDbo currentUser = userRepository.findByEmail(userName);
+        model.addAttribute("currentUser", currentUser);
+
+        return petRepository.findAllByOwner(currentUser);
     }
 }
