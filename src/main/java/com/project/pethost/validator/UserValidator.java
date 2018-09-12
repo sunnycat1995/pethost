@@ -10,8 +10,13 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserValidator implements Validator {
+
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository personRepository;
+    public UserValidator(final UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -26,7 +31,7 @@ public class UserValidator implements Validator {
         if (user.getName().length() < 6 || user.getName().length() > 32) {
             errors.rejectValue("username", "Size.userForm.username");
         }
-        if (personRepository.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(user.getEmail()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.email");
         }
 

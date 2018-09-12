@@ -153,7 +153,7 @@
             </column>
             <column name="name" type="varchar(50)"/>
             <column name="birthdate" type="date"/>
-            <column name="animal_category_id" type="bigint(3)"/>
+            <column name="category_id" type="bigint(3)"/>
             <column name="owner_id" type="bigint(20)"/>
             <column name="keeper_id" type="bigint(20)"/>
             <column name="rating" type="double"/>
@@ -188,8 +188,8 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create_rating_table" author="vyshnikova">
-        <createTable tableName="rating">
+    <changeSet id="create_keeper_rating_table" author="vyshnikova">
+        <createTable tableName="keeper_rating">
             <column name="id" type="bigint(20)">
                 <constraints primaryKey="true"/>
             </column>
@@ -198,8 +198,36 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="add_entry_to_rating_table_for_main_user" author="vyshnikova">
-        <insert tableName="rating">
+    <changeSet id="add_entry_to_keeper_rating_table_for_main_user" author="vyshnikova">
+        <insert tableName="keeper_rating">
+            <column name="id" value="1"/>
+            <column name="counter" value="0"/>
+            <column name="rating" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_entry_to_pet_table_for_main_user" author="vyshnikova">
+        <insert tableName="pet">
+            <column name="id" value="1"/>
+            <column name="name" value="Pushok"/>
+            <column name="category_id" value="1"/>
+            <column name="owner_id" value="1" />
+            <column name="description" value="Scottish Fold" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="create_pet_rating_table" author="vyshnikova">
+        <createTable tableName="pet_rating">
+            <column name="id" type="bigint(20)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="counter" type="bigint(20)"/>
+            <column name="rating" type="double"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add_entry_to_pet_rating_table_for_main_user" author="vyshnikova">
+        <insert tableName="pet_rating">
             <column name="id" value="1"/>
             <column name="counter" value="0"/>
             <column name="rating" value="0"/>

@@ -59,7 +59,6 @@ public class PetController {
             final UserDbo user = userRepository.findByEmail(userName);
             if (user != null) {
                 pet.setOwner(user);
-                pet.setKeeper(user);
             } else throw new UserNotFoundException("You are not login. Please, login the page.");
 
             pet.setName(name);
