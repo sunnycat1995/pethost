@@ -8,6 +8,7 @@ import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dto.UserDto;
 import com.project.pethost.exception.EmailExistsException;
 import com.project.pethost.factory.RatingDboFactory;
+import com.project.pethost.repository.CityRepository;
 import com.project.pethost.repository.RatingRepository;
 import com.project.pethost.repository.UserRepository;
 import com.project.pethost.service.UserService;
@@ -19,13 +20,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.security.Principal;
@@ -42,47 +47,74 @@ public class UserController extends WebMvcConfigurationSupport {
     private final RatingRepository ratingRepository;
     private final RatingDboFactory ratingDboFactory;
 
+    private final CityRepository cityRepository;
+
     @Autowired
     public UserController(final UserRepository userRepository,
                           final UserService userService,
                           final UserDboDtoConverter userDboDtoConverter,
                           final RatingRepository ratingRepository,
-                          final RatingDboFactory ratingDboFactory) {
+                          final RatingDboFactory ratingDboFactory,
+                          final CityRepository cityRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userDboDtoConverter = userDboDtoConverter;
         this.ratingRepository = ratingRepository;
         this.ratingDboFactory = ratingDboFactory;
+        this.cityRepository = cityRepository;
     }
 
-    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String signup(final WebRequest request, final Model model) {
         final UserDto userDto = new UserDto();
         model.addAttribute("user", userDto);
         return "signupPage";
+    }*/
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ModelAndView showForm() {
+        return new ModelAndView("userHome", "user", new UserDbo());
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public ModelAndView registerUserAccount(
+            @ModelAttribute("user") final UserDto accountDto,
+            final BindingResult result,
+            final WebRequest request,
+            final Errors errors,
+            final ModelMap model) {
+
+        if (!result.hasErrors()) {
+            model.addAttribute("email", accountDto.getEmail());
+            model.addAttribute("password", accountDto.getPassword());
+            model.addAttribute("name", accountDto.getName());
+            model.addAttribute("surname", accountDto.getSurname());
+            model.addAttribute("gender", accountDto.getGender());
+            //model.addAttribute("phone", accountDto.getPhone().get(0));
+            model.addAttribute("birthdate", accountDto.getBirthdate());
+            //createUserAccount(accountDto, result);
+        }
+        return new ModelAndView("signupPage", "user", accountDto);
     }
 
     /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public ModelAndView registerUserAccount(
-            @ModelAttribute("user") @Valid UserDto accountDto,
-            BindingResult result,
-            WebRequest request,
-            Errors errors) {
-
-        UserDbo registered = new UserDbo();
-        if (!result.hasErrors()) {
-            createUserAccount(accountDto, result);
-        }
-        if (registered == null) {
-            result.rejectValue("email", "message.regError");
-        }
-        if (result.hasErrors()) {
-            return new ModelAndView("signup", "user", accountDto);
-        }
-        else {
-            return new ModelAndView("userInfoPage", "user", accountDto);
-        }
+    public String showRegistrationForm(WebRequest request, Model model) {
+        UserDto userDto = new UserDto();
+        model.addAttribute("user", userDto);
+        return "registrationPage";
     }*/
+
+
+    /*@RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String submit(@Valid @ModelAttribute("user") final UserDto userDto,
+                         BindingResult result, ModelMap model) {
+        if (result.hasErrors()) {
+            return "error";
+        }
+        createUserAccount(userDto, result);
+        return "userInfoPage";
+    }*/
+
 
     private UserDbo createUserAccount(final UserDto accountDto, final BindingResult result) {
 
@@ -202,5 +234,11 @@ public class UserController extends WebMvcConfigurationSupport {
     @RequestMapping(value = "/searchUsersByAnimalPreferences", method = RequestMethod.GET)
     public @ResponseBody String searchUsersByAnimalPreferences() {
         return "Returned all users filtered by animal categories preferences";
+    }
+
+    @RequestMapping("/registerSuccessful")
+    public String viewRegisterSuccessful(Model model) {
+
+        return "registerSuccessfulPage";
     }
 }

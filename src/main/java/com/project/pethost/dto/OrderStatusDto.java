@@ -1,17 +1,10 @@
 package com.project.pethost.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@AllArgsConstructor
-@Getter
-public enum OrderStatusDto {
-    REQUESTED(1, "Requested"),
-    IN_AGREEMENT(2, "In agreenment"),
-    IN_SAFE_HANDS(3, "In safe hands"),
-    RESOLVED(4, "Resolved"),
-    UNKNOWN(5, "Unknown");
 
+@Data
+public class OrderStatusDto {
     private Integer id;
     private String value;
 }

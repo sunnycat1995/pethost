@@ -21,14 +21,20 @@ import java.util.List;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final UserRoleRepository userRoleRepository;
+
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private UserRoleRepository userRoleRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    public UserDetailsServiceImpl(final UserRepository userRepository,
+                                  final UserRoleRepository userRoleRepository,
+                                  final RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException {

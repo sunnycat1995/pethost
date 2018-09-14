@@ -1,5 +1,7 @@
 package com.project.pethost.service;
 
+import com.project.pethost.validator.EmailValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

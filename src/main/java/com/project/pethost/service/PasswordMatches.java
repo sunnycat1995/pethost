@@ -1,5 +1,7 @@
 package com.project.pethost.service;
 
+import com.project.pethost.validator.PasswordMatchesValidator;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;

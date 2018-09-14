@@ -27,21 +27,21 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         final UserDbo user = (UserDbo) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "not.empty");
         if (user.getName().length() < 6 || user.getName().length() > 32) {
-            errors.rejectValue("username", "Size.userForm.username");
+            errors.rejectValue("username", "size.userform.username");
         }
         if (userRepository.findByEmail(user.getEmail()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.email");
+            errors.rejectValue("username", "duplicate.userform.email");
         }
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "not.empty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue("password", "size.userform.password");
         }
 
         if (!user.getMatchingPassword().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+            errors.rejectValue("passwordConfirm", "diff.userform.password.confirm");
         }
     }
 }

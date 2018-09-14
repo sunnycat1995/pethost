@@ -28,7 +28,7 @@ public class UserDboDtoConverter implements DboDtoConverter<UserDbo, UserDto> {
         userDbo.setId(userDto.getId());
         userDbo.setName(userDto.getName());
         userDbo.setEmail(userDto.getEmail());
-        userDbo.setPassword(encryptedPasswordUtils.encode(userDto.getPassword()));
+        //userDbo.setPassword(encryptedPasswordUtils.encode(userDto.getPassword()));
         return userDbo;
     }
 }

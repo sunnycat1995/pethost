@@ -1,4 +1,6 @@
-package com.project.pethost.service;
+package com.project.pethost.validator;
+
+import com.project.pethost.service.ValidEmail;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
