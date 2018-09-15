@@ -6,5 +6,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum GenderDbo {
-    female, male;
+    FEMALE, MALE, NO_CHOSEN;
 }

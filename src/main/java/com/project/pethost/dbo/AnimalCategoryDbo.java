@@ -15,14 +15,6 @@ import javax.persistence.Table;
 @Table(name = "animal_category")
 @NoArgsConstructor
 public class AnimalCategoryDbo {
-    /*CAT(1, "cat"),
-    DOG(2, "dog"),
-    FISH(3, "fish"),
-    BIRD(4, "bird"),
-    REPTILE(5, "reptile"),
-    RODENT(6, "rodent"),
-    EXOTICS(7, "exotics");*/
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
