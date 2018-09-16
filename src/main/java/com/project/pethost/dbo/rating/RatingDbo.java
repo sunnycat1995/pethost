@@ -1,9 +1,9 @@
-package com.project.pethost.dto;
+package com.project.pethost.dbo.rating;
 
 import lombok.Data;
 
 @Data
-public class RatingDto {
+public abstract class RatingDbo {
     private Long id;
     private Double rating;
     private Long counter;

@@ -4,9 +4,12 @@ package com.project.pethost.controller;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dbo.UserDbo;
+import com.project.pethost.dbo.rating.PetRatingDbo;
 import com.project.pethost.exception.AnimalCategoryNotFoundException;
 import com.project.pethost.exception.UserNotFoundException;
+import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.repository.AnimalCategoryRepository;
+import com.project.pethost.repository.PetRatingRepository;
 import com.project.pethost.repository.PetRepository;
 import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +24,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,14 +39,22 @@ public class PetController {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final AnimalCategoryRepository animalCategoryRepository;
+    private final PetRatingRepository petRatingRepository;
+    private final RatingDboFactory ratingDboFactory;
+
+    private Logger LOGGER = Logger.getLogger(PetController.class.getName());
 
     @Autowired
     public PetController(final UserRepository userRepository,
                          final PetRepository petRepository,
-                         final AnimalCategoryRepository animalCategoryRepository) {
+                         final AnimalCategoryRepository animalCategoryRepository,
+                         final PetRatingRepository petRatingRepository,
+                         final RatingDboFactory ratingDboFactory) {
         this.userRepository = userRepository;
         this.petRepository = petRepository;
         this.animalCategoryRepository = animalCategoryRepository;
+        this.petRatingRepository = petRatingRepository;
+        this.ratingDboFactory = ratingDboFactory;
     }
 
     @GetMapping(path = "/createPet") // Map ONLY GET Requests
@@ -59,12 +73,15 @@ public class PetController {
             final UserDbo user = userRepository.findByEmail(userName);
             if (user != null) {
                 pet.setOwner(user);
-            } else throw new UserNotFoundException("You are not login. Please, login the page.");
+            } else {
+                final String message = "You are not logged in. Please log in and try again.";
+                throw new UserNotFoundException(message);
+            }
 
             pet.setName(name);
             pet.setBirthdate(birthdate);
             pet.setDescription(description);
-            pet.setRating(0.0);
+            pet.setCreatedDate(LocalDateTime.now());
 
             final Iterable<AnimalCategoryDbo> iterable = animalCategoryRepository.findAll();
 
@@ -77,10 +94,23 @@ public class PetController {
             animalCategory.ifPresent(pet::setCategory);
 
             if (!animalCategory.isPresent()) {
-                throw new AnimalCategoryNotFoundException("Not found animal category with id = " + categoryId);
+                final String message = "Not found animal category with id = " + categoryId;
+                LOGGER.log(Level.SEVERE, message);
+                throw new AnimalCategoryNotFoundException(message);
             }
 
             petRepository.save(pet);
+
+            final List<PetDbo> pets =
+                    petRepository.findAllByNameAndCategoryAndCreatedDateEquals(name,
+                                                                               animalCategory.get(),
+                                                                               pet.getCreatedDate());
+            if (!pets.isEmpty()) {
+                final PetRatingDbo petRatingDbo =
+                        ratingDboFactory.createRatingDbo(pets.get(0).getId(), petRepository);
+                petRatingRepository.save(petRatingDbo);
+            }
+
             return "Saved";
         }
         return "Not saved";

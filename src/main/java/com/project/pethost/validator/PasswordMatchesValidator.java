@@ -1,7 +1,6 @@
 package com.project.pethost.validator;
 
 import com.project.pethost.dbo.UserDbo;
-import com.project.pethost.service.PasswordMatches;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

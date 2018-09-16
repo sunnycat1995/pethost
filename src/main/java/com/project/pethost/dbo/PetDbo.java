@@ -9,13 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "pet")
 public class PetDbo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private LocalDate birthdate;
@@ -31,4 +32,6 @@ public class PetDbo {
     private Double rating;
 
     private String description;
+
+    private LocalDateTime createdDate;
 }

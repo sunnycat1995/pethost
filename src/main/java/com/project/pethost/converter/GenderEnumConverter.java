@@ -15,7 +15,7 @@ public class GenderEnumConverter implements Converter<String, GenderDbo> {
             return GenderDbo.valueOf(source);
         } catch (final Exception e) {
             LOGGER.log(Level.SEVERE, "Incorrect gender value " + source);
-            return null;
+            return GenderDbo.NO_CHOSEN;
         }
     }
 }

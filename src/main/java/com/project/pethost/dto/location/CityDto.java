@@ -1,4 +1,4 @@
-package com.project.pethost.dto;
+package com.project.pethost.dto.location;
 
 import lombok.Data;
 

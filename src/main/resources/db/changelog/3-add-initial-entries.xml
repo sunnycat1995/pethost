@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="add_initial_users" author="vyshnikova">
+        <insert tableName="user">
+            <column name="name" value="Irina"/>
+            <column name="surname" value="Vyshnikova"/>
+            <column name="patronymic" value="Alexandrovna"/>
+            <column name="email" value="irinavyshnikova@gmail.com"/>
+            <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_initial_user_roles" author="vyshnikova">
+        <insert tableName="user_role">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_entry_to_keeper_rating_table_for_main_user" author="vyshnikova">
+        <insert tableName="keeper_rating">
+            <column name="id" value="1"/>
+            <column name="counter" value="0"/>
+            <column name="rating" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_entry_to_pet_rating_table_for_main_user" author="vyshnikova">
+        <insert tableName="pet_rating">
+            <column name="id" value="1"/>
+            <column name="counter" value="0"/>
+            <column name="rating" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_entry_to_pet_table_for_main_user" author="vyshnikova">
+        <insert tableName="pet">
+            <column name="id" value="1"/>
+            <column name="name" value="Pushok"/>
+            <column name="category_id" value="1"/>
+            <column name="owner_id" value="1" />
+            <column name="description" value="Scottish Fold" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

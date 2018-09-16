@@ -1,5 +1,7 @@
 package com.project.pethost.dto;
 
+import com.project.pethost.dto.location.CityDto;
+import com.project.pethost.dto.location.DistrictDto;
 import lombok.Data;
 
 import java.time.LocalDate;

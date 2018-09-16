@@ -79,15 +79,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet id="add_initial_users" author="vyshnikova">
-        <insert tableName="user">
-            <column name="name" value="Irina"/>
-            <column name="surname" value="Vyshnikova"/>
-            <column name="patronymic" value="Alexandrovna"/>
-            <column name="email" value="irinavyshnikova@gmail.com"/>
-            <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq"/>
-        </insert>
-    </changeSet>
 
     <changeSet id="create_order_status_table" author="vyshnikova">
         <createTable tableName="order_status">
@@ -139,16 +130,9 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="add_initial_user_roles" author="vyshnikova">
-        <insert tableName="user_role">
-            <column name="user_id" value="1"/>
-            <column name="role_id" value="1"/>
-        </insert>
-    </changeSet>
-
     <changeSet id="create_pet_table" author="vyshnikova">
         <createTable tableName="pet">
-            <column name="id" type="bigint(20)">
+            <column name="id" type="bigint(20)"  autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(50)"/>
@@ -198,24 +182,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="add_entry_to_keeper_rating_table_for_main_user" author="vyshnikova">
-        <insert tableName="keeper_rating">
-            <column name="id" value="1"/>
-            <column name="counter" value="0"/>
-            <column name="rating" value="0"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="add_entry_to_pet_table_for_main_user" author="vyshnikova">
-        <insert tableName="pet">
-            <column name="id" value="1"/>
-            <column name="name" value="Pushok"/>
-            <column name="category_id" value="1"/>
-            <column name="owner_id" value="1" />
-            <column name="description" value="Scottish Fold" />
-        </insert>
-    </changeSet>
-
     <changeSet id="create_pet_rating_table" author="vyshnikova">
         <createTable tableName="pet_rating">
             <column name="id" type="bigint(20)">
@@ -224,14 +190,6 @@
             <column name="counter" type="bigint(20)"/>
             <column name="rating" type="double"/>
         </createTable>
-    </changeSet>
-
-    <changeSet id="add_entry_to_pet_rating_table_for_main_user" author="vyshnikova">
-        <insert tableName="pet_rating">
-            <column name="id" value="1"/>
-            <column name="counter" value="0"/>
-            <column name="rating" value="0"/>
-        </insert>
     </changeSet>
 
 </databaseChangeLog>

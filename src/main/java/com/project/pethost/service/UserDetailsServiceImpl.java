@@ -17,15 +17,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-
     private final UserRoleRepository userRoleRepository;
-
     private final RoleRepository roleRepository;
+
+    private Logger LOGGER = Logger.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Autowired
     public UserDetailsServiceImpl(final UserRepository userRepository,
@@ -41,11 +42,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final UserDbo appUser = this.userRepository.findByEmail(userName);
 
         if (appUser == null) {
-            System.out.println("User not found! " + userName);
+            LOGGER.info("User not found! " + userName);
             throw new UsernameNotFoundException("User " + userName + " was not found in the database");
         }
 
-        System.out.println("Found User: " + appUser);
+        LOGGER.info("Found User: " + appUser);
 
         // [ROLE_USER, ROLE_ADMIN,..]
         final List<UserRoleDbo> userRoles = this.userRoleRepository.findAllById(appUser.getId());
@@ -54,12 +55,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (userRoles != null) {
             userRoles.forEach(r -> {
                 final RoleDbo roleDbo = this.roleRepository.findAllById(r.getId());
-                GrantedAuthority authority = new SimpleGrantedAuthority(roleDbo.getRole().getRole());
+                final GrantedAuthority authority = new SimpleGrantedAuthority(roleDbo.getRole().getRole());
                 grantList.add(authority);
             });
         }
 
-        final UserDetails userDetails = (UserDetails) new User(appUser.getEmail(), appUser.getPassword(), grantList);
+        final UserDetails userDetails = new User(appUser.getEmail(), appUser.getPassword(), grantList);
 
         return userDetails;
     }

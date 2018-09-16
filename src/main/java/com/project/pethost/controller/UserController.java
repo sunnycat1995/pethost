@@ -2,16 +2,15 @@ package com.project.pethost.controller;
 
 import com.project.pethost.converter.GenderEnumConverter;
 import com.project.pethost.converter.UserDboDtoConverter;
-import com.project.pethost.dbo.GenderDbo;
-import com.project.pethost.dbo.RatingDbo;
 import com.project.pethost.dbo.UserDbo;
+import com.project.pethost.dbo.rating.KeeperRatingDbo;
 import com.project.pethost.dto.UserDto;
 import com.project.pethost.exception.EmailExistsException;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.repository.CityRepository;
-import com.project.pethost.repository.RatingRepository;
+import com.project.pethost.repository.KeeperRatingRepository;
 import com.project.pethost.repository.UserRepository;
-import com.project.pethost.service.UserService;
+import com.project.pethost.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.support.FormattingConversionService;
@@ -42,18 +41,18 @@ import java.util.List;
 public class UserController extends WebMvcConfigurationSupport {
 
     private final UserRepository userRepository;
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final UserDboDtoConverter userDboDtoConverter;
-    private final RatingRepository ratingRepository;
+    private final KeeperRatingRepository ratingRepository;
     private final RatingDboFactory ratingDboFactory;
 
     private final CityRepository cityRepository;
 
     @Autowired
     public UserController(final UserRepository userRepository,
-                          final UserService userService,
+                          final UserServiceImpl userService,
                           final UserDboDtoConverter userDboDtoConverter,
-                          final RatingRepository ratingRepository,
+                          final KeeperRatingRepository ratingRepository,
                           final RatingDboFactory ratingDboFactory,
                           final CityRepository cityRepository) {
         this.userRepository = userRepository;
@@ -161,12 +160,14 @@ public class UserController extends WebMvcConfigurationSupport {
         return "logoutSuccessfulPage";
     }
 
-
+    /*
+    http://localhost:8091/pethost/register?name=Petya&surname=Petrov&email=petya@gmail.com&gender=male&phone=1234567&phone=9876543&birthdate=1995-05-18&enabled=true&password=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq&matchingPassword=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq
+    */
     @GetMapping(path = "/register") // Map ONLY GET Requests
     public @ResponseBody String addNewPerson(@RequestParam final String name,
                                              @RequestParam final String surname,
                                              @RequestParam(required = false) final String patronymic,
-                                             @RequestParam(name = "gender") GenderDbo gender,
+                                             //@RequestParam(name = "gender") GenderDbo gender,
 
                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                              @RequestParam(required = false) final LocalDate birthdate,
@@ -188,7 +189,7 @@ public class UserController extends WebMvcConfigurationSupport {
         p.setName(name);
         p.setSurname(surname);
         p.setPatronymic(patronymic);
-        p.setGender(gender);
+        //p.setGender(gender);
         p.setBirthdate(birthdate);
         p.setEmail(email);
         p.setPhone(phone);
@@ -203,7 +204,7 @@ public class UserController extends WebMvcConfigurationSupport {
         } catch (EmailExistsException e) {
             e.printStackTrace();
         }
-        final RatingDbo ratingDbo = ratingDboFactory.createRatingDbo(email, userRepository);
+        final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(email, userRepository);
         ratingRepository.save(ratingDbo);
         return "Saved";
     }
@@ -221,7 +222,7 @@ public class UserController extends WebMvcConfigurationSupport {
 
     @Override
     public FormattingConversionService mvcConversionService() {
-        FormattingConversionService f = super.mvcConversionService();
+        final FormattingConversionService f = super.mvcConversionService();
         f.addConverter(new GenderEnumConverter());
         return f;
     }

@@ -1,8 +1,10 @@
 package com.project.pethost.dbo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.pethost.service.PasswordMatches;
-import com.project.pethost.service.ValidEmail;
+import com.project.pethost.dbo.location.CityDbo;
+import com.project.pethost.dbo.location.DistrictDbo;
+import com.project.pethost.validator.PasswordMatches;
+import com.project.pethost.validator.ValidEmail;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

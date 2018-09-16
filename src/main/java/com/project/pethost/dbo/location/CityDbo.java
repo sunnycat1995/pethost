@@ -1,4 +1,4 @@
-package com.project.pethost.dbo;
+package com.project.pethost.dbo.location;
 
 import lombok.Data;
 
@@ -8,13 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Data
-@Table(name = "rating")
-public class RatingDbo {
+@Entity
+@Table(name = "city")
+public class CityDbo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Double rating;
-    private Long counter;
+    private String name;
 }
