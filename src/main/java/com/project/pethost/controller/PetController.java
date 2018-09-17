@@ -130,5 +130,16 @@ public class PetController {
         model.addAttribute("currentUser", currentUser);
 
         return petRepository.findAllByOwner(currentUser);
+        //return userRepository.findByEmail(userName);
     }
+
+    /*@RequestMapping("/pets")
+    public @ResponseBody UserDbo getAllPets(final Model model,
+                                                     @AuthenticationPrincipal final Principal principal) {
+        final String userName = principal.getName();
+        final UserDbo currentUser = userRepository.findByEmail(userName);
+        model.addAttribute("currentUser", currentUser);
+
+        return userRepository.findByEmail(userName);
+    }*/
 }

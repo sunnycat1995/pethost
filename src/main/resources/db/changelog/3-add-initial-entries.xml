@@ -38,11 +38,18 @@
 
     <changeSet id="add_entry_to_pet_table_for_main_user" author="vyshnikova">
         <insert tableName="pet">
-            <column name="id" value="1"/>
             <column name="name" value="Pushok"/>
             <column name="category_id" value="1"/>
-            <column name="owner_id" value="1" />
-            <column name="description" value="Scottish Fold" />
+            <column name="owner_id" value="1"/>
+            <column name="description" value="Scottish Fold"/>
+            <column name="created_date" value="now()"/>
+        </insert>
+        <insert tableName="pet">
+            <column name="name" value="Indigo"/>
+            <column name="category_id" value="2"/>
+            <column name="owner_id" value="1"/>
+            <column name="description" value="Siberian Husky"/>
+            <column name="created_date" value="now()"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

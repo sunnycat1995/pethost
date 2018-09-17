@@ -1,6 +1,5 @@
 package com.project.pethost.dbo;
 
-import com.project.pethost.model.UserRoleType;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -22,5 +21,5 @@ public class RoleDbo {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private UserRoleType role;
+    private UserRoleTypeDbo role;
 }

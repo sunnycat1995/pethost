@@ -132,7 +132,7 @@
 
     <changeSet id="create_pet_table" author="vyshnikova">
         <createTable tableName="pet">
-            <column name="id" type="bigint(20)"  autoIncrement="true">
+            <column name="id" type="bigint(20)" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(50)"/>
@@ -140,8 +140,8 @@
             <column name="category_id" type="bigint(3)"/>
             <column name="owner_id" type="bigint(20)"/>
             <column name="keeper_id" type="bigint(20)"/>
-            <column name="rating" type="double"/>
             <column name="description" type="varchar(500)"/>
+            <column name="created_date" type="timestamp"/>
         </createTable>
     </changeSet>
 

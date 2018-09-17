@@ -15,7 +15,5 @@ public class PetDto {
     private UserDto owner;
     private UserDto keeper;
 
-    private Double rating;
-
     private String description;
 }

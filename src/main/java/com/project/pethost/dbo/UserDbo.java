@@ -27,6 +27,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -40,9 +41,11 @@ public class UserDbo {
 
     @NotNull
     @NotEmpty
+    @JsonIgnore
     private String password;
 
     @Transient
+    @JsonIgnore
     private String matchingPassword;
 
     @NotEmpty
@@ -84,8 +87,8 @@ public class UserDbo {
     @ElementCollection(targetClass = String.class)
     @JsonIgnore
     @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"))
-    private List<AnimalCategoryDbo> animalCategoryPreference;
+    private Set<AnimalCategoryDbo> animalCategoryPreference;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<PetDbo> pets;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    private Set<PetDbo> pets;
 }
