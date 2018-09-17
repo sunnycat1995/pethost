@@ -1,39 +1,40 @@
 package com.project.pethost.controller;
 
+import com.project.pethost.AppUserForm;
 import com.project.pethost.converter.GenderEnumConverter;
 import com.project.pethost.converter.UserDboDtoConverter;
 import com.project.pethost.dbo.UserDbo;
-import com.project.pethost.dbo.rating.KeeperRatingDbo;
+import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dto.UserDto;
-import com.project.pethost.exception.EmailExistsException;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.repository.CityRepository;
 import com.project.pethost.repository.KeeperRatingRepository;
 import com.project.pethost.repository.UserRepository;
 import com.project.pethost.service.UserServiceImpl;
+import com.project.pethost.util.EncryptedPasswordUtils;
+import com.project.pethost.validator.AppUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -45,6 +46,7 @@ public class UserController extends WebMvcConfigurationSupport {
     private final UserDboDtoConverter userDboDtoConverter;
     private final KeeperRatingRepository ratingRepository;
     private final RatingDboFactory ratingDboFactory;
+    private final AppUserValidator appUserValidator;
 
     private final CityRepository cityRepository;
 
@@ -54,13 +56,31 @@ public class UserController extends WebMvcConfigurationSupport {
                           final UserDboDtoConverter userDboDtoConverter,
                           final KeeperRatingRepository ratingRepository,
                           final RatingDboFactory ratingDboFactory,
+                          final AppUserValidator appUserValidator,
                           final CityRepository cityRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userDboDtoConverter = userDboDtoConverter;
         this.ratingRepository = ratingRepository;
         this.ratingDboFactory = ratingDboFactory;
+        this.appUserValidator = appUserValidator;
         this.cityRepository = cityRepository;
+    }
+
+    // Set a form validator
+    @InitBinder
+    protected void initBinder(final WebDataBinder dataBinder) {
+        // Form target
+        final Object target = dataBinder.getTarget();
+        if (target == null) {
+            return;
+        }
+        System.out.println("Target=" + target);
+
+        if (target.getClass() == AppUserForm.class) {
+            dataBinder.setValidator(appUserValidator);
+        }
+        // ...
     }
 
     /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -75,7 +95,7 @@ public class UserController extends WebMvcConfigurationSupport {
         return new ModelAndView("userHome", "user", new UserDbo());
     }
 
-    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
     public ModelAndView registerUserAccount(
             @ModelAttribute("user") final UserDto accountDto,
             final BindingResult result,
@@ -94,7 +114,7 @@ public class UserController extends WebMvcConfigurationSupport {
             //createUserAccount(accountDto, result);
         }
         return new ModelAndView("signupPage", "user", accountDto);
-    }
+    }*/
 
     /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String showRegistrationForm(WebRequest request, Model model) {
@@ -163,7 +183,7 @@ public class UserController extends WebMvcConfigurationSupport {
     /*
     http://localhost:8091/pethost/register?name=Petya&surname=Petrov&email=petya@gmail.com&gender=male&phone=1234567&phone=9876543&birthdate=1995-05-18&enabled=true&password=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq&matchingPassword=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq
     */
-    @GetMapping(path = "/register") // Map ONLY GET Requests
+    /*@GetMapping(path = "/register") // Map ONLY GET Requests
     public @ResponseBody String addNewPerson(@RequestParam final String name,
                                              @RequestParam final String surname,
                                              @RequestParam(required = false) final String patronymic,
@@ -207,7 +227,7 @@ public class UserController extends WebMvcConfigurationSupport {
         final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(email, userRepository);
         ratingRepository.save(ratingDbo);
         return "Saved";
-    }
+    }*/
 
     /*@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(final Model model, final String error, final String logout) {
@@ -237,9 +257,74 @@ public class UserController extends WebMvcConfigurationSupport {
         return "Returned all users filtered by animal categories preferences";
     }
 
-    @RequestMapping("/registerSuccessful")
-    public String viewRegisterSuccessful(Model model) {
+    // Show Register page.
+    @RequestMapping(value = "/signup", method = RequestMethod.GET)
+    public String viewRegister(final Model model) {
 
+        final AppUserForm form = new AppUserForm();
+        final Iterable<CityDbo> cities = cityRepository.findAll();
+        final List<CityDbo> cityDbos = new ArrayList<>();
+        cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+        model.addAttribute("appUserForm", form);
+        model.addAttribute("countries", cityDbos);
+
+        return "registerPage";
+    }
+
+    // This method is called to save the registration information.
+    // @Validated: To ensure that this Form
+    // has been Validated before this method is invoked.
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String saveRegister(final Model model, //
+                               final @ModelAttribute("appUserForm") @Valid AppUserForm appUserForm, //
+                               final BindingResult result, //
+                               final RedirectAttributes redirectAttributes) {
+
+        // Validate result
+        if (result.hasErrors()) {
+            final Iterable<CityDbo> cities = cityRepository.findAll();
+            final List<CityDbo> cityDbos = new ArrayList<>();
+            cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+            model.addAttribute("countries", cityDbos);
+            return "registerPage";
+        }
+        UserDbo newUser;
+        try {
+            newUser = createAppUser(appUserForm);
+        }
+        // Other error!!
+        catch (Exception e) {
+            final Iterable<CityDbo> cities = cityRepository.findAll();
+            final List<CityDbo> cityDbos = new ArrayList<>();
+            cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+            model.addAttribute("countries", cityDbos);
+            model.addAttribute("errorMessage", "Error: " + e.getMessage());
+            return "registerPage";
+        }
+
+        redirectAttributes.addFlashAttribute("flashUser", newUser);
+
+        return "redirect:registerSuccessful";
+    }
+
+    @RequestMapping("/registerSuccessful")
+    public String viewRegisterSuccessful(final Model model) {
+        
         return "registerSuccessfulPage";
+    }
+
+    public UserDbo createAppUser(final AppUserForm form) {
+        //final Long userId = userRepository.getMaxId() + 1;
+        final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
+
+       /* final UserDbo user = new UserDbo(userId, form.getUserName(), //
+                                   form.getFirstName(), form.getLastName(), false, //
+                                   form.getGender(), form.getEmail(), form.getCountryCode(), //
+                                   encrytedPassword);*/
+        final UserDbo user = new UserDbo(encrytedPassword, //
+                                         form.getFirstName(), form.getLastName(), form.getEmail());
+        userRepository.save(user);
+        //USERS_MAP.put(userId, user);
+        return user;
     }
 }

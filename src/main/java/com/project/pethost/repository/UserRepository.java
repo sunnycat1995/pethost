@@ -10,4 +10,6 @@ public interface UserRepository extends CrudRepository<UserDbo, Long> {
     UserDbo findByEmail(final String email);
     List<UserDbo> findByNameContains(final String name);
     List<UserDbo> findAllByAnimalCategoryPreference(final AnimalCategoryDbo animalCategory);
+    /*@Query("SELECT coalesce(max(u.id), 0) FROM user u")
+    Long getMaxId();*/
 }

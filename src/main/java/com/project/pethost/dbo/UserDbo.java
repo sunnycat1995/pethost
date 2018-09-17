@@ -3,7 +3,6 @@ package com.project.pethost.dbo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dbo.location.DistrictDbo;
-import com.project.pethost.validator.PasswordMatches;
 import com.project.pethost.validator.ValidEmail;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +32,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "user")
-@PasswordMatches
+//@PasswordMatches
 @NoArgsConstructor
 public class UserDbo {
     @Id
@@ -93,4 +92,14 @@ public class UserDbo {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @JsonIgnore
     private Set<PetDbo> pets;
+
+    public UserDbo(@NotNull @NotEmpty final String password,
+                   @NotEmpty final String name,
+                   @NotEmpty final String surname,
+                   @NotNull @NotEmpty final String email) {
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+    }
 }
