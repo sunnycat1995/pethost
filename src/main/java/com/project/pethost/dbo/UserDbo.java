@@ -15,6 +15,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -84,11 +85,12 @@ public class UserDbo {
     private Boolean enabled;
 
     @Column
-    @ElementCollection(targetClass = String.class)
-    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    //@JsonIgnore
     @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"))
     private Set<AnimalCategoryDbo> animalCategoryPreference;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @JsonIgnore
     private Set<PetDbo> pets;
 }
