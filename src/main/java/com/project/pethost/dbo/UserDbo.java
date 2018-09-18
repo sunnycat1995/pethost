@@ -32,7 +32,6 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "user")
-//@PasswordMatches
 @NoArgsConstructor
 public class UserDbo {
     @Id
@@ -46,7 +45,7 @@ public class UserDbo {
 
     @Transient
     @JsonIgnore
-    private String matchingPassword;
+    private String confirmPassword;
 
     @NotEmpty
     private String name;
@@ -79,13 +78,10 @@ public class UserDbo {
 
     private String address;
 
-    private Double rating;
-
     private Boolean enabled;
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
-    //@JsonIgnore
     @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"))
     private Set<AnimalCategoryDbo> animalCategoryPreference;
 
@@ -96,10 +92,13 @@ public class UserDbo {
     public UserDbo(@NotNull @NotEmpty final String password,
                    @NotEmpty final String name,
                    @NotEmpty final String surname,
-                   @NotNull @NotEmpty final String email) {
+                   @NotNull @NotEmpty final String email,
+                   final String gender) {
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.email = email;
+        this.gender = GenderDbo.valueOf(gender);
+        this.enabled = true;
     }
 }

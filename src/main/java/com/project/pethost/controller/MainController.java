@@ -1,7 +1,5 @@
 package com.project.pethost.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,10 +7,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import java.util.logging.Logger;
+
 @Controller
 @RequestMapping(path = "/pethost")
 public class MainController extends WebMvcConfigurationSupport {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcomePage(final Model model) {

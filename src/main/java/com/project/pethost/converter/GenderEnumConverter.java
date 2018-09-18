@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GenderEnumConverter implements Converter<String, GenderDbo> {
-    private Logger LOGGER = Logger.getLogger(GenderEnumConverter.class.getName());
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     @Override
     public GenderDbo convert(final String source) {

@@ -14,7 +14,7 @@ public class UserDto {
 
     private String password;
 
-    //private String matchingPassword;
+    //private String confirmPassword;
 
     private String name;
 
@@ -34,8 +34,6 @@ public class UserDto {
     private CityDto city;
 
     private String address;
-
-    private Double rating;
 
     private Boolean enabled;
 

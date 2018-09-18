@@ -26,7 +26,7 @@
 <div th:if="${errorMessage != null}"
      th:utext="${errorMessage}" class="error">...</div>
 
-<form action="/pethost/signup" th:object="${appUserForm}" method="POST">
+<form th:action="@{/pethost/signup}" th:object="${appUserForm}" method="POST">
     <table>
         <tr>
             <td>Email</td>
@@ -67,9 +67,9 @@
             <td>Gender</td>
             <td>
                 <select th:field="*{gender}">
-                    <option value=""> -- </option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
+                    <option value="NO_CHOSEN"> -- </option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
                 </select>
             </td>
             <td>
@@ -81,7 +81,7 @@
             <td>
                 <select th:field="*{countryCode}">
                     <option value=""> -- </option>
-                    <option th:each="city : ${countries}"
+                    <option th:each="city : ${cities}"
                             th:value="${city.name}"
                             th:utext="${city.name}"/>
                 </select>

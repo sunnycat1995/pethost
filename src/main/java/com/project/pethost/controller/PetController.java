@@ -35,6 +35,7 @@ import java.util.stream.StreamSupport;
 @Controller
 @RequestMapping(path = "/pethost")
 public class PetController {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final UserRepository userRepository;
     private final PetRepository petRepository;
@@ -42,7 +43,6 @@ public class PetController {
     private final PetRatingRepository petRatingRepository;
     private final RatingDboFactory ratingDboFactory;
 
-    private Logger LOGGER = Logger.getLogger(PetController.class.getName());
 
     @Autowired
     public PetController(final UserRepository userRepository,

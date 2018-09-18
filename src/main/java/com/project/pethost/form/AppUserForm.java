@@ -1,4 +1,4 @@
-package com.project.pethost;
+package com.project.pethost.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

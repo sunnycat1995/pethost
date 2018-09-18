@@ -1,6 +1,6 @@
 package com.project.pethost.validator;
 
-import com.project.pethost.AppUserForm;
+import com.project.pethost.form.AppUserForm;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.repository.UserRepository;
 import org.apache.commons.validator.routines.EmailValidator;

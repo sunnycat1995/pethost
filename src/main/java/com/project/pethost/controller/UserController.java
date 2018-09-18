@@ -1,6 +1,6 @@
 package com.project.pethost.controller;
 
-import com.project.pethost.AppUserForm;
+import com.project.pethost.form.AppUserForm;
 import com.project.pethost.converter.GenderEnumConverter;
 import com.project.pethost.converter.UserDboDtoConverter;
 import com.project.pethost.dbo.UserDbo;
@@ -36,10 +36,12 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping(path = "/pethost")
 public class UserController extends WebMvcConfigurationSupport {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
@@ -49,6 +51,7 @@ public class UserController extends WebMvcConfigurationSupport {
     private final AppUserValidator appUserValidator;
 
     private final CityRepository cityRepository;
+
 
     @Autowired
     public UserController(final UserRepository userRepository,
@@ -75,7 +78,7 @@ public class UserController extends WebMvcConfigurationSupport {
         if (target == null) {
             return;
         }
-        System.out.println("Target=" + target);
+        LOGGER.info("Target=" + target);
 
         if (target.getClass() == AppUserForm.class) {
             dataBinder.setValidator(appUserValidator);
@@ -198,7 +201,7 @@ public class UserController extends WebMvcConfigurationSupport {
                                              @RequestParam(required = false) final Long cityId,
                                              @RequestParam(required = false) final String address,
                                              @RequestParam final String password,
-                                             @RequestParam final String matchingPassword
+                                             @RequestParam final String confirmPassword
                                              //@ModelAttribute final List<AnimalCategory> animalCategories
                                             ) {
         // @ResponseBody means the returned String is the response, not a view name
@@ -214,7 +217,7 @@ public class UserController extends WebMvcConfigurationSupport {
         p.setEmail(email);
         p.setPhone(phone);
         p.setPassword(password);
-        p.setMatchingPassword(matchingPassword);
+        p.setConfirmPassword(confirmPassword);
         //p.setDistrict();
         //p.setCityId();
         p.setAddress(address);
@@ -266,7 +269,7 @@ public class UserController extends WebMvcConfigurationSupport {
         final List<CityDbo> cityDbos = new ArrayList<>();
         cities.forEach(cityDbo -> cityDbos.add(cityDbo));
         model.addAttribute("appUserForm", form);
-        model.addAttribute("countries", cityDbos);
+        model.addAttribute("cities", cityDbos);
 
         return "registerPage";
     }
@@ -285,7 +288,7 @@ public class UserController extends WebMvcConfigurationSupport {
             final Iterable<CityDbo> cities = cityRepository.findAll();
             final List<CityDbo> cityDbos = new ArrayList<>();
             cities.forEach(cityDbo -> cityDbos.add(cityDbo));
-            model.addAttribute("countries", cityDbos);
+            model.addAttribute("cities", cityDbos);
             return "registerPage";
         }
         UserDbo newUser;
@@ -297,7 +300,7 @@ public class UserController extends WebMvcConfigurationSupport {
             final Iterable<CityDbo> cities = cityRepository.findAll();
             final List<CityDbo> cityDbos = new ArrayList<>();
             cities.forEach(cityDbo -> cityDbos.add(cityDbo));
-            model.addAttribute("countries", cityDbos);
+            model.addAttribute("cities", cityDbos);
             model.addAttribute("errorMessage", "Error: " + e.getMessage());
             return "registerPage";
         }
@@ -309,7 +312,7 @@ public class UserController extends WebMvcConfigurationSupport {
 
     @RequestMapping("/registerSuccessful")
     public String viewRegisterSuccessful(final Model model) {
-        
+
         return "registerSuccessfulPage";
     }
 
@@ -322,9 +325,8 @@ public class UserController extends WebMvcConfigurationSupport {
                                    form.getGender(), form.getEmail(), form.getCountryCode(), //
                                    encrytedPassword);*/
         final UserDbo user = new UserDbo(encrytedPassword, //
-                                         form.getFirstName(), form.getLastName(), form.getEmail());
+                                         form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender());
         userRepository.save(user);
-        //USERS_MAP.put(userId, user);
         return user;
     }
 }

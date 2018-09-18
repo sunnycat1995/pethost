@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.logging.Logger;
+
 @Controller
 @RequestMapping(path = "/pethost")
 public class OrderController {
+    private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final OrderRepository orderRepository;
 

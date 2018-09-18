@@ -63,7 +63,6 @@
             <column name="address" type="varchar(255)"/>
             <column name="birthdate" type="date"/>
             <column name="gender" type="varchar(255)"/>
-            <column name="rating" type="double"/>
             <column name="enabled" type="boolean" defaultValueBoolean="true"/>
             <column name="city_id" type="bigint(20)">
                 <constraints

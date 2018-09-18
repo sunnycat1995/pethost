@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDboDtoConverter implements DboDtoConverter<UserDbo, UserDto> {
 
-    @Autowired
     private EncryptedPasswordUtils encryptedPasswordUtils;
 
+    @Autowired
     public UserDboDtoConverter(final EncryptedPasswordUtils encryptedPasswordUtils) {
         this.encryptedPasswordUtils = encryptedPasswordUtils;
     }

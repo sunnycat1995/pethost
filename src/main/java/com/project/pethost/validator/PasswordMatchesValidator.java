@@ -14,6 +14,6 @@ public class PasswordMatchesValidator
     @Override
     public boolean isValid(final Object obj, final ConstraintValidatorContext context){
         final UserDbo user = (UserDbo) obj;
-        return user.getPassword().equals(user.getMatchingPassword());
+        return user.getPassword().equals(user.getConfirmPassword());
     }
 }
