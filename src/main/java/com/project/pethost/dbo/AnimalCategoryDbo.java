@@ -1,6 +1,7 @@
 package com.project.pethost.dbo;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "animal_category")
 @NoArgsConstructor
+@AllArgsConstructor
 public class AnimalCategoryDbo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

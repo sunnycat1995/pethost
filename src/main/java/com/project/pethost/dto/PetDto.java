@@ -3,6 +3,7 @@ package com.project.pethost.dto;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class PetDto {
@@ -16,4 +17,8 @@ public class PetDto {
     private UserDto keeper;
 
     private String description;
+
+    private String avatarUrl;
+
+    private LocalDateTime createdDate;
 }

@@ -43,6 +43,7 @@
             <column name="category_id" value="1"/>
             <column name="owner_id" value="1"/>
             <column name="description" value="Scottish Fold"/>
+            <column name="avatar_url" value="https://steemitimages.com/DQmVjN7kPZ13LWzqSATJhzDd3UQ3TaWw7GkonnSLTk96ELs/scottish-fold-cinsi-kedilerin-sakin-gorunumunun-sebebi-belli-oldu-369327-5.jpg" />
             <column name="created_date" value="now()"/>
         </insert>
         <insert tableName="pet">

@@ -117,8 +117,8 @@ public class PetController {
     }
 
 
-    @RequestMapping(value = "/searchWaitingPetsByCategories", method = RequestMethod.GET)
-    public @ResponseBody String searchWaitingPetsByCategories() {
+    @RequestMapping(value = "/searchWaitingOrdersByAnimalCategories", method = RequestMethod.GET)
+    public @ResponseBody String searchWaitingOrdersByAnimalCategories() {
         return "Returned all waiting orders filtered by categories";
     }
 

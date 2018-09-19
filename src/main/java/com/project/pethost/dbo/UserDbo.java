@@ -20,6 +20,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -85,14 +86,18 @@ public class UserDbo {
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"),
+            indexes = {@Index(name = "UserAnimalPreferencesAttributes", columnList = "user_id, animal_category_preference_id")}/*,
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"user_id", "animal_category_preference_id" }) }*/
+            )
     private Set<AnimalCategoryDbo> animalCategoryPreference;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @JsonIgnore
     private Set<PetDbo> pets;
 
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
 
@@ -100,7 +105,8 @@ public class UserDbo {
                    @NotEmpty final String name,
                    @NotEmpty final String surname,
                    @NotNull @NotEmpty final String email,
-                   final String gender) {
+                   final String gender,
+                   final Set<AnimalCategoryDbo> animalCategoryPreference) {
         this.password = password;
         this.name = name;
         this.surname = surname;
@@ -108,5 +114,6 @@ public class UserDbo {
         this.gender = GenderDbo.valueOf(gender);
         this.enabled = true;
         this.createdDate = LocalDateTime.now();
+        this.animalCategoryPreference = animalCategoryPreference;
     }
 }

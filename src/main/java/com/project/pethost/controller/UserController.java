@@ -5,7 +5,6 @@ import com.project.pethost.converter.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
-import com.project.pethost.dto.UserDto;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.form.AppUserForm;
 import com.project.pethost.repository.AnimalCategoryRepository;
@@ -30,15 +29,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @Controller
@@ -81,20 +82,12 @@ public class UserController extends WebMvcConfigurationSupport {
     protected void initBinder(final WebDataBinder dataBinder) {
         // Form target
         final Object target = dataBinder.getTarget();
-        if (target == null) {
-            return;
-        }
         LOGGER.info("Target=" + target);
-
-        if (target.getClass() == AppUserForm.class) {
-            dataBinder.setValidator(appUserValidator);
+        if (target != null) {
+            if (target.getClass() == AppUserForm.class) {
+                dataBinder.setValidator(appUserValidator);
+            }
         }
-        // ...
-    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public ModelAndView showForm() {
-        return new ModelAndView("userHome", "user", new UserDbo());
     }
 
     /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
@@ -115,15 +108,6 @@ public class UserController extends WebMvcConfigurationSupport {
         return "userInfoPage";
     }*/
 
-
-    private UserDbo createUserAccount(final UserDto accountDto, final BindingResult result) {
-
-        UserDbo userDbo = userDboDtoConverter.convertToDbo(accountDto);
-        userDbo = userRepository.save(userDbo);
-
-        return userDbo;
-    }
-
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(final Principal principal) {
         if (principal != null) {
@@ -131,7 +115,6 @@ public class UserController extends WebMvcConfigurationSupport {
         }
         return "loginPage";
     }
-
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
@@ -178,7 +161,6 @@ public class UserController extends WebMvcConfigurationSupport {
         return "Returned all users filtered by animal categories preferences";
     }
 
-    // Show Register page.
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String viewRegister(final Model model) {
 
@@ -250,11 +232,25 @@ public class UserController extends WebMvcConfigurationSupport {
     }
 
     public UserDbo createAppUser(final AppUserForm form) {
-        //final Long userId = userRepository.getMaxId() + 1;
         final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
-        final UserDbo user = new UserDbo(encrytedPassword, //
-                                         form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender());
+        final Iterable<AnimalCategoryDbo> animalCategories = animalCategoryRepository.findAll();
+        final List<AnimalCategoryDbo> animalCategoryDbos = new ArrayList<>();
+        animalCategories.forEach(animalCategoryDbos::add);
+
+        final Set<AnimalCategoryDbo> animalCategoryPreference = new HashSet<>();
+
+        final String[] userAnimalPreferences = form.getAnimalPreferences();
+        Arrays.stream(userAnimalPreferences).forEach(preference -> {
+            animalCategoryDbos.forEach(category -> {
+                if (preference.equals(category.getCategory())) {
+                    animalCategoryPreference.add(category);
+                }
+            });
+        });
+        final UserDbo user = new UserDbo(encrytedPassword,
+                                         form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender(),
+                                         animalCategoryPreference);
         userRepository.save(user);
         return user;
     }

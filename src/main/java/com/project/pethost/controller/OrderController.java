@@ -24,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping(path = "/orders")
-    public @ResponseBody Iterable<OrderDbo> getAllOrders() {
+    public @ResponseBody Iterable<OrderDbo> allOrders() {
         return orderRepository.findAll();
     }
 

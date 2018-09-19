@@ -46,7 +46,7 @@
             </td>
         </tr>
         <tr>
-            <td>Confirm</td>
+            <td>Confirm password</td>
             <td><input type="password" th:field="*{confirmPassword}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">..</span>
@@ -95,17 +95,17 @@
             <td>Animal preferences</td>
             <td>
                 <ul>
-                    <li th:each="checkboxValue : *{animalPreferences}">
+                    <li th:each="checkboxValue : ${animalPreferences}">
                         <input type="checkbox"
-                               th:field="${checkboxValue.category}"
+                               th:field="*{animalPreferences}"
                                th:value="${checkboxValue.category}"/>
                         <label
-                                th:for="${#ids.prev('checkboxValue.category')}"
+                                th:for="${#ids.prev('animalPreferences')}"
                                 th:text="${checkboxValue.category}"></label>
                     </li>
                 </ul>
             </td>
-                <!-- <td><span th:if="${#fields.hasErrors('countryCode')}" th:errors="*{countryCode}">..</span></td>-->
+                 <td><span th:if="${#fields.hasErrors('animalPreferences')}" th:errors="*{animalPreferences}">..</span></td>
         </tr>
 
         <tr>

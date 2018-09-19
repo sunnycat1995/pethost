@@ -14,10 +14,11 @@ import java.util.logging.Logger;
 public class MainController extends WebMvcConfigurationSupport {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/", "/welcome"}, method = RequestMethod.GET)
     public String welcomePage(final Model model) {
         model.addAttribute("title", "Welcome");
         model.addAttribute("message", "Welcome to the Pethost page!");
+        model.addAttribute("content", "Content text");
         return "welcomePage";
     }
 

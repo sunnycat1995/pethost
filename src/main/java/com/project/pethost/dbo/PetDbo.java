@@ -45,6 +45,8 @@ public class PetDbo {
 
     private String description;
 
+    private String avatarUrl;
+
     @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
