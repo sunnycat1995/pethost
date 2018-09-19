@@ -1,12 +1,14 @@
 package com.project.pethost.controller;
 
-import com.project.pethost.form.AppUserForm;
 import com.project.pethost.converter.GenderEnumConverter;
 import com.project.pethost.converter.UserDboDtoConverter;
+import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dto.UserDto;
 import com.project.pethost.factory.RatingDboFactory;
+import com.project.pethost.form.AppUserForm;
+import com.project.pethost.repository.AnimalCategoryRepository;
 import com.project.pethost.repository.CityRepository;
 import com.project.pethost.repository.KeeperRatingRepository;
 import com.project.pethost.repository.UserRepository;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -51,6 +54,7 @@ public class UserController extends WebMvcConfigurationSupport {
     private final AppUserValidator appUserValidator;
 
     private final CityRepository cityRepository;
+    private final AnimalCategoryRepository animalCategoryRepository;
 
 
     @Autowired
@@ -60,7 +64,8 @@ public class UserController extends WebMvcConfigurationSupport {
                           final KeeperRatingRepository ratingRepository,
                           final RatingDboFactory ratingDboFactory,
                           final AppUserValidator appUserValidator,
-                          final CityRepository cityRepository) {
+                          final CityRepository cityRepository,
+                          final AnimalCategoryRepository animalCategoryRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userDboDtoConverter = userDboDtoConverter;
@@ -68,6 +73,7 @@ public class UserController extends WebMvcConfigurationSupport {
         this.ratingDboFactory = ratingDboFactory;
         this.appUserValidator = appUserValidator;
         this.cityRepository = cityRepository;
+        this.animalCategoryRepository = animalCategoryRepository;
     }
 
     // Set a form validator
@@ -86,38 +92,10 @@ public class UserController extends WebMvcConfigurationSupport {
         // ...
     }
 
-    /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public String signup(final WebRequest request, final Model model) {
-        final UserDto userDto = new UserDto();
-        model.addAttribute("user", userDto);
-        return "signupPage";
-    }*/
-
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ModelAndView showForm() {
         return new ModelAndView("userHome", "user", new UserDbo());
     }
-
-    /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public ModelAndView registerUserAccount(
-            @ModelAttribute("user") final UserDto accountDto,
-            final BindingResult result,
-            final WebRequest request,
-            final Errors errors,
-            final ModelMap model) {
-
-        if (!result.hasErrors()) {
-            model.addAttribute("email", accountDto.getEmail());
-            model.addAttribute("password", accountDto.getPassword());
-            model.addAttribute("name", accountDto.getName());
-            model.addAttribute("surname", accountDto.getSurname());
-            model.addAttribute("gender", accountDto.getGender());
-            //model.addAttribute("phone", accountDto.getPhone().get(0));
-            model.addAttribute("birthdate", accountDto.getBirthdate());
-            //createUserAccount(accountDto, result);
-        }
-        return new ModelAndView("signupPage", "user", accountDto);
-    }*/
 
     /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String showRegistrationForm(WebRequest request, Model model) {
@@ -183,66 +161,6 @@ public class UserController extends WebMvcConfigurationSupport {
         return "logoutSuccessfulPage";
     }
 
-    /*
-    http://localhost:8091/pethost/register?name=Petya&surname=Petrov&email=petya@gmail.com&gender=male&phone=1234567&phone=9876543&birthdate=1995-05-18&enabled=true&password=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq&matchingPassword=$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq
-    */
-    /*@GetMapping(path = "/register") // Map ONLY GET Requests
-    public @ResponseBody String addNewPerson(@RequestParam final String name,
-                                             @RequestParam final String surname,
-                                             @RequestParam(required = false) final String patronymic,
-                                             //@RequestParam(name = "gender") GenderDbo gender,
-
-                                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                             @RequestParam(required = false) final LocalDate birthdate,
-
-                                             @RequestParam final String email,
-                                             @RequestParam(required = false) final List<String> phone,
-                                             @RequestParam(required = false) final Long districtId,
-                                             @RequestParam(required = false) final Long cityId,
-                                             @RequestParam(required = false) final String address,
-                                             @RequestParam final String password,
-                                             @RequestParam final String confirmPassword
-                                             //@ModelAttribute final List<AnimalCategory> animalCategories
-                                            ) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-
-
-        final UserDbo p = new UserDbo();
-        p.setName(name);
-        p.setSurname(surname);
-        p.setPatronymic(patronymic);
-        //p.setGender(gender);
-        p.setBirthdate(birthdate);
-        p.setEmail(email);
-        p.setPhone(phone);
-        p.setPassword(password);
-        p.setConfirmPassword(confirmPassword);
-        //p.setDistrict();
-        //p.setCityId();
-        p.setAddress(address);
-        //userRepository.save(p);
-        try {
-            userService.registerNewUserAccount(p);
-        } catch (EmailExistsException e) {
-            e.printStackTrace();
-        }
-        final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(email, userRepository);
-        ratingRepository.save(ratingDbo);
-        return "Saved";
-    }*/
-
-    /*@RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(final Model model, final String error, final String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
-    }*/
-
     @Override
     public FormattingConversionService mvcConversionService() {
         final FormattingConversionService f = super.mvcConversionService();
@@ -265,11 +183,11 @@ public class UserController extends WebMvcConfigurationSupport {
     public String viewRegister(final Model model) {
 
         final AppUserForm form = new AppUserForm();
-        final Iterable<CityDbo> cities = cityRepository.findAll();
-        final List<CityDbo> cityDbos = new ArrayList<>();
-        cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+        final List<CityDbo> cityDbos = cities();
+        final List<AnimalCategoryDbo> animalCategoryDbos = animalCategories();
         model.addAttribute("appUserForm", form);
         model.addAttribute("cities", cityDbos);
+        model.addAttribute("animalPreferences", animalCategoryDbos);
 
         return "registerPage";
     }
@@ -282,13 +200,13 @@ public class UserController extends WebMvcConfigurationSupport {
                                final @ModelAttribute("appUserForm") @Valid AppUserForm appUserForm, //
                                final BindingResult result, //
                                final RedirectAttributes redirectAttributes) {
+        final List<AnimalCategoryDbo> animalCategoryDbos = animalCategories();
 
         // Validate result
         if (result.hasErrors()) {
-            final Iterable<CityDbo> cities = cityRepository.findAll();
-            final List<CityDbo> cityDbos = new ArrayList<>();
-            cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+            final List<CityDbo> cityDbos = cities();
             model.addAttribute("cities", cityDbos);
+            model.addAttribute("animalPreferences", animalCategoryDbos);
             return "registerPage";
         }
         UserDbo newUser;
@@ -296,11 +214,10 @@ public class UserController extends WebMvcConfigurationSupport {
             newUser = createAppUser(appUserForm);
         }
         // Other error!!
-        catch (Exception e) {
-            final Iterable<CityDbo> cities = cityRepository.findAll();
-            final List<CityDbo> cityDbos = new ArrayList<>();
-            cities.forEach(cityDbo -> cityDbos.add(cityDbo));
+        catch (final Exception e) {
+            final List<CityDbo> cityDbos = cities();
             model.addAttribute("cities", cityDbos);
+            model.addAttribute("animalPreferences", animalCategoryDbos);
             model.addAttribute("errorMessage", "Error: " + e.getMessage());
             return "registerPage";
         }
@@ -308,6 +225,22 @@ public class UserController extends WebMvcConfigurationSupport {
         redirectAttributes.addFlashAttribute("flashUser", newUser);
 
         return "redirect:registerSuccessful";
+    }
+
+    private List<CityDbo> cities() {
+        final Iterable<CityDbo> cities = cityRepository.findAll();
+        final List<CityDbo> cityDbos = new ArrayList<>();
+        cities.forEach(cityDbos::add);
+        cityDbos.sort(Comparator.comparing(CityDbo::getName));
+        return cityDbos;
+    }
+
+    private List<AnimalCategoryDbo> animalCategories() {
+        final Iterable<AnimalCategoryDbo> animalCategories = animalCategoryRepository.findAll();
+        final List<AnimalCategoryDbo> animalCategoryDbos = new ArrayList<>();
+        animalCategories.forEach(animalCategoryDbos::add);
+        animalCategoryDbos.sort(Comparator.comparing(AnimalCategoryDbo::getCategory));
+        return animalCategoryDbos;
     }
 
     @RequestMapping("/registerSuccessful")
@@ -320,10 +253,6 @@ public class UserController extends WebMvcConfigurationSupport {
         //final Long userId = userRepository.getMaxId() + 1;
         final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
-       /* final UserDbo user = new UserDbo(userId, form.getUserName(), //
-                                   form.getFirstName(), form.getLastName(), false, //
-                                   form.getGender(), form.getEmail(), form.getCountryCode(), //
-                                   encrytedPassword);*/
         final UserDbo user = new UserDbo(encrytedPassword, //
                                          form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender());
         userRepository.save(user);

@@ -76,6 +76,7 @@
                         referencedColumnNames="id"
                         foreignKeyName="district1_fk_district_id"/>
             </column>
+            <column name="created_date" type="timestamp"/>
         </createTable>
     </changeSet>
 
@@ -164,8 +165,8 @@
                              referencedColumnNames="id"
                              referencedTableName="pet"/>
             </column>
-            <column name="createdDate" type="date"/>
-            <column name="bookingDate" type="date"/>
+            <column name="createdDate" type="timestamp"/>
+            <column name="bookingDate" type="timestamp"/>
             <column name="lastModifiedDate" type="date"/>
             <column name="comments" type="varchar(500)"/>
         </createTable>

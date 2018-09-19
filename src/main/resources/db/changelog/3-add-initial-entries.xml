@@ -10,6 +10,7 @@
             <column name="patronymic" value="Alexandrovna"/>
             <column name="email" value="irinavyshnikova@gmail.com"/>
             <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq"/>
+            <column name="created_date" value="now()" />
         </insert>
     </changeSet>
 

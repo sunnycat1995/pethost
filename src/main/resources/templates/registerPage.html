@@ -6,11 +6,13 @@
         th, td {
             padding: 5px;
         }
-        td span  {
-            font-size:90%;
+
+        td span {
+            font-size: 90%;
             font-style: italic;
             color: red;
         }
+
         .error {
             color: red;
             font-style: italic;
@@ -24,41 +26,42 @@
 <h2>Register</h2>
 
 <div th:if="${errorMessage != null}"
-     th:utext="${errorMessage}" class="error">...</div>
+     th:utext="${errorMessage}" class="error">...
+</div>
 
 <form th:action="@{/pethost/signup}" th:object="${appUserForm}" method="POST">
     <table>
         <tr>
             <td>Email</td>
-            <td><input type="text" th:field="*{email}" /> </td>
+            <td><input type="text" th:field="*{email}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">..</span>
             </td>
         </tr>
         <tr>
             <td>Password</td>
-            <td><input type="password" th:field="*{password}" /> </td>
+            <td><input type="password" th:field="*{password}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">..</span>
             </td>
         </tr>
         <tr>
             <td>Confirm</td>
-            <td><input type="password" th:field="*{confirmPassword}" /> </td>
+            <td><input type="password" th:field="*{confirmPassword}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">..</span>
             </td>
         </tr>
         <tr>
             <td>First Name</td>
-            <td><input type="text" th:field="*{firstName}" /> </td>
+            <td><input type="text" th:field="*{firstName}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">..</span>
             </td>
         </tr>
         <tr>
             <td>Last Name</td>
-            <td><input type="text" th:field="*{lastName}" /> </td>
+            <td><input type="text" th:field="*{lastName}"/></td>
             <td>
                 <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">..</span>
             </td>
@@ -67,7 +70,7 @@
             <td>Gender</td>
             <td>
                 <select th:field="*{gender}">
-                    <option value="NO_CHOSEN"> -- </option>
+                    <option value="NO_CHOSEN"> --</option>
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
                 </select>
@@ -80,17 +83,35 @@
             <td>City</td>
             <td>
                 <select th:field="*{countryCode}">
-                    <option value=""> -- </option>
+                    <option value=""> --</option>
                     <option th:each="city : ${cities}"
                             th:value="${city.name}"
                             th:utext="${city.name}"/>
                 </select>
             <td><span th:if="${#fields.hasErrors('countryCode')}" th:errors="*{countryCode}">..</span></td>
         </tr>
+
+        <tr>
+            <td>Animal preferences</td>
+            <td>
+                <ul>
+                    <li th:each="checkboxValue : *{animalPreferences}">
+                        <input type="checkbox"
+                               th:field="${checkboxValue.category}"
+                               th:value="${checkboxValue.category}"/>
+                        <label
+                                th:for="${#ids.prev('checkboxValue.category')}"
+                                th:text="${checkboxValue.category}"></label>
+                    </li>
+                </ul>
+            </td>
+                <!-- <td><span th:if="${#fields.hasErrors('countryCode')}" th:errors="*{countryCode}">..</span></td>-->
+        </tr>
+
         <tr>
             <td>&nbsp;</td>
             <td>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Submit"/>
                 <a th:href="@{/}">Cancel</a>
             </td>
             <td>&nbsp;</td>

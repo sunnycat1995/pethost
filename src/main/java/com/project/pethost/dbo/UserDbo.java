@@ -1,11 +1,13 @@
 package com.project.pethost.dbo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dbo.location.DistrictDbo;
 import com.project.pethost.validator.ValidEmail;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -26,6 +28,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -89,6 +92,10 @@ public class UserDbo {
     @JsonIgnore
     private Set<PetDbo> pets;
 
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime createdDate;
+
     public UserDbo(@NotNull @NotEmpty final String password,
                    @NotEmpty final String name,
                    @NotEmpty final String surname,
@@ -100,5 +107,6 @@ public class UserDbo {
         this.email = email;
         this.gender = GenderDbo.valueOf(gender);
         this.enabled = true;
+        this.createdDate = LocalDateTime.now();
     }
 }
