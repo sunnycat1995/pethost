@@ -25,7 +25,7 @@ public class AppUserValidator implements Validator {
 
     // The classes are supported by this validator.
     @Override
-    public boolean supports(Class<?> clazz) {
+    public boolean supports(final Class<?> clazz) {
         return clazz == AppUserForm.class;
     }
 

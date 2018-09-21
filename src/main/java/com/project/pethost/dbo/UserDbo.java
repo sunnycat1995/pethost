@@ -26,6 +26,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -74,10 +75,12 @@ public class UserDbo {
     @CollectionTable(name = "user_phone", joinColumns = @JoinColumn(name = "user_id"))
     private List<String> phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "district_id", nullable = false)
     private DistrictDbo district;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "city_id", nullable = false)
     private CityDbo city;
 
     private String address;
@@ -85,12 +88,11 @@ public class UserDbo {
     private Boolean enabled;
 
     @Column
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "user_animal_category", joinColumns = @JoinColumn(name = "user_id"),
-            indexes = {@Index(name = "UserAnimalPreferencesAttributes", columnList = "user_id, animal_category_preference_id")}/*,
-            uniqueConstraints = {
-                    @UniqueConstraint(columnNames = {"user_id", "animal_category_preference_id" }) }*/
-            )
+            indexes = {@Index(name = "UserAnimalPreferencesAttributes",
+                    columnList = "user_id, animal_category_preference_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "animal_category_preference_id"}))
     private Set<AnimalCategoryDbo> animalCategoryPreference;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")

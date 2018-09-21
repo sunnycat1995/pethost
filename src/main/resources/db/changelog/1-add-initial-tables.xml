@@ -193,4 +193,35 @@
         </createTable>
     </changeSet>
 
+    <!--<changeSet id="create_user_animal_category_table" author="vyshnikova">
+        <createTable tableName="user_animal_category">
+            <column name="user_id" type="bigint(20)">
+                <constraints
+                        referencedTableName="user"
+                        referencedColumnNames="id"
+                        foreignKeyName="usert_fk_usert_id"/>
+            </column>
+            <column name="animal_category_preference_id" type="bigint(20)">
+                <constraints
+                        referencedTableName="animal_category"
+                        referencedColumnNames="id"
+                        foreignKeyName="animal_categoryt_fk_animal_categoryt_id"/>
+            </column>
+        </createTable>
+    </changeSet>-->
+    <!--<changeSet id="drop_unique_index" author="vyshnikova">
+        <sql>ALTER TABLE user_animal_category DROP INDEX UK_pnrwst94y1mtusgs65d7c81l</sql>
+    </changeSet>-->
+    <changeSet id="create_user_animal_category_table" author="vyshnikova">
+        <sql>CREATE TABLE user_animal_category (
+                user_id bigint(20) NOT NULL,
+                animal_category_preference_id int(11) NOT NULL,
+                PRIMARY KEY (user_id, animal_category_preference_id),
+                UNIQUE KEY UK_pnrwst94y1mtusgs65d7c81l (user_id, animal_category_preference_id)
+            )</sql>
+    </changeSet>
+   <!-- <changeSet id="drop_index_from_use_animal_category_table" author="vyshnikova">
+        <sql>ALTER TABLE user_animal_category DROP INDEX UK_pnrwst94y1mtusgs65d7c81l</sql>
+    </changeSet>-->
+
 </databaseChangeLog>
