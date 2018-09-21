@@ -116,21 +116,18 @@ public class PetController {
         return "Not saved";
     }
 
-
     @RequestMapping(value = "/searchWaitingOrdersByAnimalCategories", method = RequestMethod.GET)
     public @ResponseBody String searchWaitingOrdersByAnimalCategories() {
         return "Returned all waiting orders filtered by categories";
     }
 
-    @RequestMapping("/pets")
-    public @ResponseBody Iterable<PetDbo> getAllPets(final Model model,
-                                                     @AuthenticationPrincipal final Principal principal) {
+    @GetMapping("/mypets")
+    public String getAllPets(final Model model, @AuthenticationPrincipal final Principal principal) {
         final String userName = principal.getName();
         final UserDbo currentUser = userRepository.findByEmail(userName);
         model.addAttribute("currentUser", currentUser);
-
-        return petRepository.findAllByOwner(currentUser);
-        //return userRepository.findByEmail(userName);
+        model.addAttribute("pets", petRepository.findAllByOwner(currentUser));
+        return "myPetsPage";
     }
 
     /*@RequestMapping("/pets")
