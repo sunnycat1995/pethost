@@ -30,6 +30,8 @@ public class PetDbo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthdate;
 
     @OneToOne(targetEntity = AnimalCategoryDbo.class)

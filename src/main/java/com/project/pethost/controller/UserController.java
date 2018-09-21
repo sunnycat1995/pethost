@@ -1,17 +1,18 @@
 package com.project.pethost.controller;
 
 import com.project.pethost.converter.GenderEnumConverter;
-import com.project.pethost.converter.UserDboDtoConverter;
+import com.project.pethost.converter.dbodto.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
+import com.project.pethost.dbo.rating.KeeperRatingDbo;
 import com.project.pethost.exception.CityOutOfBoundException;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.form.AppUserForm;
 import com.project.pethost.repository.AnimalCategoryRepository;
-import com.project.pethost.repository.CityRepository;
 import com.project.pethost.repository.KeeperRatingRepository;
 import com.project.pethost.repository.UserRepository;
+import com.project.pethost.service.DataService;
 import com.project.pethost.service.UserServiceImpl;
 import com.project.pethost.util.EncryptedPasswordUtils;
 import com.project.pethost.validator.AppUserValidator;
@@ -35,9 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,9 +54,7 @@ public class UserController extends WebMvcConfigurationSupport {
     private final KeeperRatingRepository ratingRepository;
     private final RatingDboFactory ratingDboFactory;
     private final AppUserValidator appUserValidator;
-
-    private final CityRepository cityRepository;
-    private final AnimalCategoryRepository animalCategoryRepository;
+    private final DataService dataService;
 
 
     @Autowired
@@ -67,16 +64,15 @@ public class UserController extends WebMvcConfigurationSupport {
                           final KeeperRatingRepository ratingRepository,
                           final RatingDboFactory ratingDboFactory,
                           final AppUserValidator appUserValidator,
-                          final CityRepository cityRepository,
-                          final AnimalCategoryRepository animalCategoryRepository) {
+                          final AnimalCategoryRepository animalCategoryRepository,
+                          final DataService dataService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userDboDtoConverter = userDboDtoConverter;
         this.ratingRepository = ratingRepository;
         this.ratingDboFactory = ratingDboFactory;
         this.appUserValidator = appUserValidator;
-        this.cityRepository = cityRepository;
-        this.animalCategoryRepository = animalCategoryRepository;
+        this.dataService = dataService;
     }
 
     // Set a form validator
@@ -167,8 +163,8 @@ public class UserController extends WebMvcConfigurationSupport {
     public String viewRegister(final Model model) {
 
         final AppUserForm form = new AppUserForm();
-        final List<CityDbo> cityDbos = cities();
-        final List<AnimalCategoryDbo> animalCategoryDbos = animalCategories();
+        final List<CityDbo> cityDbos = dataService.cities();
+        final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
         model.addAttribute("appUserForm", form);
         model.addAttribute("cities", cityDbos);
         model.addAttribute("animalPreferences", animalCategoryDbos);
@@ -184,11 +180,11 @@ public class UserController extends WebMvcConfigurationSupport {
                                final @ModelAttribute("appUserForm") @Valid AppUserForm appUserForm, //
                                final BindingResult result, //
                                final RedirectAttributes redirectAttributes) {
-        final List<AnimalCategoryDbo> animalCategoryDbos = animalCategories();
+        final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
 
         // Validate result
         if (result.hasErrors()) {
-            final List<CityDbo> cityDbos = cities();
+            final List<CityDbo> cityDbos = dataService.cities();
             model.addAttribute("cities", cityDbos);
             model.addAttribute("animalPreferences", animalCategoryDbos);
             return "registerPage";
@@ -203,7 +199,7 @@ public class UserController extends WebMvcConfigurationSupport {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
         catch (final Exception e) {
-            final List<CityDbo> cityDbos = cities();
+            final List<CityDbo> cityDbos = dataService.cities();
             model.addAttribute("cities", cityDbos);
             model.addAttribute("animalPreferences", animalCategoryDbos);
             model.addAttribute("errorMessage", "Error: " + e.getMessage());
@@ -211,22 +207,6 @@ public class UserController extends WebMvcConfigurationSupport {
         }
 
         return "redirect:registerSuccessful";
-    }
-
-    private List<CityDbo> cities() {
-        final Iterable<CityDbo> cities = cityRepository.findAll();
-        final List<CityDbo> cityDbos = new ArrayList<>();
-        cities.forEach(cityDbos::add);
-        cityDbos.sort(Comparator.comparing(CityDbo::getName));
-        return cityDbos;
-    }
-
-    private List<AnimalCategoryDbo> animalCategories() {
-        final Iterable<AnimalCategoryDbo> animalCategories = animalCategoryRepository.findAll();
-        final List<AnimalCategoryDbo> animalCategoryDbos = new ArrayList<>();
-        animalCategories.forEach(animalCategoryDbos::add);
-        animalCategoryDbos.sort(Comparator.comparing(AnimalCategoryDbo::getCategory));
-        return animalCategoryDbos;
     }
 
     @RequestMapping("/registerSuccessful")
@@ -238,10 +218,7 @@ public class UserController extends WebMvcConfigurationSupport {
     public UserDbo createAppUser(final AppUserForm form) throws CityOutOfBoundException {
         final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
-        final Iterable<AnimalCategoryDbo> animalCategories = animalCategoryRepository.findAll();
-        final List<AnimalCategoryDbo> animalCategoryDbos = new ArrayList<>();
-        animalCategories.forEach(animalCategoryDbos::add);
-
+        final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
         final Set<AnimalCategoryDbo> animalCategoryPreference = new HashSet<>();
 
         final String[] userAnimalPreferences = form.getAnimalPreferences();
@@ -254,7 +231,7 @@ public class UserController extends WebMvcConfigurationSupport {
         });
 
         final String cityName = form.getCountryCode();
-        final List<CityDbo> cities = cityRepository.findAllByName(cityName);
+        final List<CityDbo> cities = dataService.findAllCitiesByName(cityName);
 
         if (cities.size() == 0) {
             throw new CityOutOfBoundException("Not found city " + cityName + " in results");
@@ -270,6 +247,10 @@ public class UserController extends WebMvcConfigurationSupport {
                                          cityDbo,
                                          animalCategoryPreference);
         userRepository.save(user);
+
+        final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(form.getEmail(), userRepository);
+        ratingRepository.save(ratingDbo);
+
         return user;
     }
 }

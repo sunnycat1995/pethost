@@ -1,4 +1,4 @@
-package com.project.pethost.converter;
+package com.project.pethost.converter.dbodto;
 
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dto.UserDto;

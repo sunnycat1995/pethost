@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new pet</title>
+</head>
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+<form th:action="@{/pethost/createPet}" th:object="${form}" method="POST">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table>
+            <thead>
+            <tr>
+                <th> Name</th>
+                <th> Birthdate</th>
+                <th> Category</th>
+                <th> Description</th>
+                <th> Avatar url</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pet, itemStat : *{pets}">
+                <td><input th:field="*{pets[__${itemStat.index}__].name}" /></td>
+                <td><input type="date" th:field="*{pets[__${itemStat.index}__].birthdate}" /></td>
+                <td><select th:field="*{pets[__${itemStat.index}__].category}">
+                    <option value=""> --</option>
+                    <option th:each="animalCategory : ${animalCategories}"
+                            th:value="${animalCategory.category}"
+                            th:utext="${animalCategory.category}"/>
+                </select></td>
+                <td><textarea th:field="*{pets[__${itemStat.index}__].description}" /></td>
+                <td><input th:field="*{pets[__${itemStat.index}__].avatarUrl}" /></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+</body>
+</html>

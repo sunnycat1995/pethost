@@ -1,4 +1,4 @@
-package com.project.pethost.converter;
+package com.project.pethost.converter.dbodto;
 
 public interface DboDtoConverter<Dbo, Dto> {
 

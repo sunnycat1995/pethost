@@ -15,8 +15,12 @@
 <br/><br/>
 
 <div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
-
-<a th:href="@{/pethost/mypets}">Show all pets</a>
+<div>
+    <a th:href="@{/pethost/mypets}">Show my pets</a>
+</div>
+<div>
+    <a th:href="@{/pethost/createPet}">Create pet</a>
+</div>
 
 </body>
 
