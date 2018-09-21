@@ -5,6 +5,7 @@ import com.project.pethost.converter.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
+import com.project.pethost.exception.CityOutOfBoundException;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.form.AppUserForm;
 import com.project.pethost.repository.AnimalCategoryRepository;
@@ -40,6 +41,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Controller
@@ -194,8 +196,12 @@ public class UserController extends WebMvcConfigurationSupport {
         UserDbo newUser;
         try {
             newUser = createAppUser(appUserForm);
+            redirectAttributes.addFlashAttribute("flashUser", newUser);
         }
         // Other error!!
+        catch (final CityOutOfBoundException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
         catch (final Exception e) {
             final List<CityDbo> cityDbos = cities();
             model.addAttribute("cities", cityDbos);
@@ -203,8 +209,6 @@ public class UserController extends WebMvcConfigurationSupport {
             model.addAttribute("errorMessage", "Error: " + e.getMessage());
             return "registerPage";
         }
-
-        redirectAttributes.addFlashAttribute("flashUser", newUser);
 
         return "redirect:registerSuccessful";
     }
@@ -231,7 +235,7 @@ public class UserController extends WebMvcConfigurationSupport {
         return "registerSuccessfulPage";
     }
 
-    public UserDbo createAppUser(final AppUserForm form) {
+    public UserDbo createAppUser(final AppUserForm form) throws CityOutOfBoundException {
         final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
         final Iterable<AnimalCategoryDbo> animalCategories = animalCategoryRepository.findAll();
@@ -248,8 +252,22 @@ public class UserController extends WebMvcConfigurationSupport {
                 }
             });
         });
+
+        final String cityName = form.getCountryCode();
+        final List<CityDbo> cities = cityRepository.findAllByName(cityName);
+
+        if (cities.size() == 0) {
+            throw new CityOutOfBoundException("Not found city " + cityName + " in results");
+        }
+        if (cities.size() > 1) {
+            throw new CityOutOfBoundException("Returned more than 1 city with the same name " + cityName);
+        }
+
+        final CityDbo cityDbo = cities.get(0);
+
         final UserDbo user = new UserDbo(encrytedPassword,
                                          form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender(),
+                                         cityDbo,
                                          animalCategoryPreference);
         userRepository.save(user);
         return user;

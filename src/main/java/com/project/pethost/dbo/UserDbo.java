@@ -6,7 +6,9 @@ import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dbo.location.DistrictDbo;
 import com.project.pethost.validator.ValidEmail;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.CascadeType;
@@ -22,6 +24,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -79,8 +82,10 @@ public class UserDbo {
     @JoinColumn(name = "district_id", nullable = false)
     private DistrictDbo district;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "city_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private CityDbo city;
 
     private String address;
@@ -108,6 +113,7 @@ public class UserDbo {
                    @NotEmpty final String surname,
                    @NotNull @NotEmpty final String email,
                    final String gender,
+                   final CityDbo cityDbo,
                    final Set<AnimalCategoryDbo> animalCategoryPreference) {
         this.password = password;
         this.name = name;
@@ -116,6 +122,7 @@ public class UserDbo {
         this.gender = GenderDbo.valueOf(gender);
         this.enabled = true;
         this.createdDate = LocalDateTime.now();
+        this.city = cityDbo;
         this.animalCategoryPreference = animalCategoryPreference;
     }
 }

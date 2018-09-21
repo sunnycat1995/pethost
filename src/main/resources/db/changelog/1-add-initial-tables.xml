@@ -220,8 +220,5 @@
                 UNIQUE KEY UK_pnrwst94y1mtusgs65d7c81l (user_id, animal_category_preference_id)
             )</sql>
     </changeSet>
-   <!-- <changeSet id="drop_index_from_use_animal_category_table" author="vyshnikova">
-        <sql>ALTER TABLE user_animal_category DROP INDEX UK_pnrwst94y1mtusgs65d7c81l</sql>
-    </changeSet>-->
 
 </databaseChangeLog>

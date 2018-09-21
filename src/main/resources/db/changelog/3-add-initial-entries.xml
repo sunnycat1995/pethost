@@ -9,8 +9,10 @@
             <column name="surname" value="Vyshnikova"/>
             <column name="patronymic" value="Alexandrovna"/>
             <column name="email" value="irinavyshnikova@gmail.com"/>
+            <column name="city_id" value="21"/>
+            <column name="gender" value="FEMALE"/>
             <column name="password" value="$2a$10$KuRL4rJZhZdVV4nYVcGOrONdjJ7Pc0gJgB3AcHsgfyzlcq5ifAorq"/>
-            <column name="created_date" value="now()" />
+            <column name="created_date" value="now()"/>
         </insert>
     </changeSet>
 
@@ -43,7 +45,8 @@
             <column name="category_id" value="1"/>
             <column name="owner_id" value="1"/>
             <column name="description" value="Scottish Fold"/>
-            <column name="avatar_url" value="https://steemitimages.com/DQmVjN7kPZ13LWzqSATJhzDd3UQ3TaWw7GkonnSLTk96ELs/scottish-fold-cinsi-kedilerin-sakin-gorunumunun-sebebi-belli-oldu-369327-5.jpg" />
+            <column name="avatar_url"
+                    value="https://steemitimages.com/DQmVjN7kPZ13LWzqSATJhzDd3UQ3TaWw7GkonnSLTk96ELs/scottish-fold-cinsi-kedilerin-sakin-gorunumunun-sebebi-belli-oldu-369327-5.jpg"/>
             <column name="created_date" value="now()"/>
         </insert>
         <insert tableName="pet">
@@ -52,6 +55,21 @@
             <column name="owner_id" value="1"/>
             <column name="description" value="Siberian Husky"/>
             <column name="created_date" value="now()"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="add_entries_to_user_animal_category_table_for_main_user" author="vyshnikova">
+        <insert tableName="user_animal_category">
+            <column name="user_id" value="1"/>
+            <column name="animal_category_preference_id" value="1"/>
+        </insert>
+        <insert tableName="user_animal_category">
+            <column name="user_id" value="1"/>
+            <column name="animal_category_preference_id" value="2"/>
+        </insert>
+        <insert tableName="user_animal_category">
+            <column name="user_id" value="1"/>
+            <column name="animal_category_preference_id" value="4"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
