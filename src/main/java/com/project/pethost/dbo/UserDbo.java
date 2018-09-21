@@ -100,8 +100,7 @@ public class UserDbo {
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "animal_category_preference_id"}))
     private Set<AnimalCategoryDbo> animalCategoryPreference;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner")
     private Set<PetDbo> pets;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

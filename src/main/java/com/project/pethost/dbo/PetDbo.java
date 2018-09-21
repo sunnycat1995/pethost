@@ -1,6 +1,7 @@
 package com.project.pethost.dbo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -33,12 +35,15 @@ public class PetDbo {
     @OneToOne(targetEntity = AnimalCategoryDbo.class)
     private AnimalCategoryDbo category;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     private UserDbo owner;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "keeper_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private UserDbo keeper;
