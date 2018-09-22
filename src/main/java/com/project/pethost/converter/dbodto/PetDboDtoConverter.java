@@ -1,21 +1,24 @@
 package com.project.pethost.converter.dbodto;
 
+import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dto.PetDto;
+import com.project.pethost.repository.AnimalCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
 
-    private UserDboDtoConverter userDboDtoConverter;
+    private AnimalCategoryRepository animalCategoryRepository;
 
     @Autowired
-    public PetDboDtoConverter(final UserDboDtoConverter userDboDtoConverter) {
-        this.userDboDtoConverter = userDboDtoConverter;
+    public PetDboDtoConverter(final AnimalCategoryRepository animalCategoryRepository) {
+        this.animalCategoryRepository = animalCategoryRepository;
     }
 
     @Override
@@ -33,6 +36,10 @@ public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
         final PetDbo dbo = new PetDbo();
         dbo.setName(dto.getName());
         dbo.setBirthdate(LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ISO_DATE));
+        final Integer categoryId = Integer.valueOf(dto.getCategory());
+
+        final Optional<AnimalCategoryDbo> animalCategoryDbo = animalCategoryRepository.findById(categoryId);
+        animalCategoryDbo.ifPresent(dbo::setCategory);
         dbo.setDescription(dto.getDescription());
         dbo.setAvatarUrl(dto.getAvatarUrl());
         return dbo;
