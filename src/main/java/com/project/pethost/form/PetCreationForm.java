@@ -1,12 +1,14 @@
-package com.project.pethost.dto;
+package com.project.pethost.form;
+
+import com.project.pethost.dto.PetDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PetCreationDto {
+public class PetCreationForm {
     private List<PetDto> pets;
 
-    public PetCreationDto() {
+    public PetCreationForm() {
         pets = new ArrayList<>();
     }
 

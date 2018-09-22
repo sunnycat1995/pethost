@@ -6,10 +6,9 @@ import com.project.pethost.converter.dbodto.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dbo.UserDbo;
-import com.project.pethost.dto.PetCreationDto;
 import com.project.pethost.dto.PetDto;
-import com.project.pethost.dto.UserDto;
 import com.project.pethost.factory.RatingDboFactory;
+import com.project.pethost.form.PetCreationForm;
 import com.project.pethost.repository.PetRatingRepository;
 import com.project.pethost.repository.PetRepository;
 import com.project.pethost.repository.UserRepository;
@@ -78,7 +77,7 @@ public class PetController {
         final Object target = dataBinder.getTarget();
         LOGGER.info("Target=" + target);
         if (target != null) {
-            if (target.getClass() == PetCreationDto.class) {
+            if (target.getClass() == PetCreationForm.class) {
                 dataBinder.setValidator(petCreationValidator);
             }
         }
@@ -158,7 +157,7 @@ public class PetController {
 
     @GetMapping("/createPet")
     public String showCreateForm(final Model model, @AuthenticationPrincipal final Principal principal) {
-        final PetCreationDto petsForm = new PetCreationDto();
+        final PetCreationForm petsForm = new PetCreationForm();
         petsForm.addPet(new PetDto());
 
         model.addAttribute("form", petsForm);
@@ -168,8 +167,7 @@ public class PetController {
     }
 
     @PostMapping("/createPet")
-    public String savePet(@ModelAttribute @Valid final PetCreationDto form,
-                          final Model model,
+    public String savePet(@ModelAttribute @Valid final PetCreationForm form,
                           final BindingResult result,
                           final RedirectAttributes redirectAttributes,
                           @AuthenticationPrincipal final Principal principal) {
@@ -180,18 +178,15 @@ public class PetController {
             return "createPetFormPage";
         }
         final UserDbo currentUser = getCurrentUser(principal);
-        final UserDto currentUserDto = userDboDtoConverter.convertToDto(currentUser);
-
         final PetDto petDto = new PetDto(pet.getName(), pet.getBirthdate(), pet.getCategory(), pet.getDescription(),
-                                         pet.getAvatarUrl(), currentUserDto);
+                                         pet.getAvatarUrl());
         final PetDbo petDbo = petDboDtoConverter.convertToDbo(petDto);
+        petDbo.setOwner(currentUser);
         petDbo.setCreatedDate(LocalDateTime.now());
-
 
         petRepository.save(petDbo);
 
-        model.addAttribute("pets", petRepository.findAll());
-        return "Saved";
+        return "redirect:mypets";
     }
 
     private UserDbo getCurrentUser(final @AuthenticationPrincipal Principal principal) {

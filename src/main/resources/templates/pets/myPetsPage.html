@@ -27,7 +27,7 @@
         <td><span th:text="${pet.id}"> Id </span></td>
         <td><span th:text="${pet.name}"> Name </span></td>
         <td><span th:text="${pet.birthdate}"> Birthdate </span></td>
-        <td><span th:text="${pet.category.getCategory()}"> Category </span></td>
+        <td><span th:text="${pet?.category?.getCategory()}"> Category </span></td>
         <td><span th:text="${pet.description}"> Description </span></td>
         <td><span th:text="${pet.avatarUrl}"> Avatar url </span></td>
         <td><span th:text="${pet.createdDate}"> Created date </span></td>

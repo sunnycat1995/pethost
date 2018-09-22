@@ -1,6 +1,6 @@
 package com.project.pethost.validator;
 
-import com.project.pethost.dto.PetCreationDto;
+import com.project.pethost.form.PetCreationForm;
 import com.project.pethost.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,12 +19,12 @@ public class PetCreationValidator implements Validator {
 
     @Override
     public boolean supports(final Class<?> clazz) {
-        return clazz == PetCreationDto.class;
+        return clazz == PetCreationForm.class;
     }
 
     @Override
     public void validate(final Object target, final Errors errors) {
-        final PetCreationDto petCreationForm = (PetCreationDto) target;
+        final PetCreationForm petCreationForm = (PetCreationForm) target;
 
         System.out.println(petCreationForm);
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "not.empty.app.userform.firstname");

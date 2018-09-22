@@ -5,6 +5,9 @@ import com.project.pethost.dto.PetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
 
@@ -19,10 +22,9 @@ public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
     public PetDto convertToDto(final PetDbo dbo) {
         final PetDto dto = new PetDto();
         dto.setName(dbo.getName());
-        dto.setBirthdate(dbo.getBirthdate());
+        dto.setBirthdate(dbo.getBirthdate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         dto.setDescription(dbo.getDescription());
         dto.setAvatarUrl(dbo.getAvatarUrl());
-        dto.setCreatedDate(dbo.getCreatedDate());
         return dto;
     }
 
@@ -30,11 +32,9 @@ public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
     public PetDbo convertToDbo(final PetDto dto) {
         final PetDbo dbo = new PetDbo();
         dbo.setName(dto.getName());
-        dbo.setBirthdate(dto.getBirthdate());
-        dbo.setOwner(userDboDtoConverter.convertToDbo(dto.getOwner()));
+        dbo.setBirthdate(LocalDate.parse(dto.getBirthdate(), DateTimeFormatter.ISO_DATE));
         dbo.setDescription(dto.getDescription());
         dbo.setAvatarUrl(dto.getAvatarUrl());
-        dbo.setCreatedDate(dto.getCreatedDate());
         return dbo;
     }
 }
