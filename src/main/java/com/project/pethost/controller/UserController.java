@@ -5,7 +5,6 @@ import com.project.pethost.converter.dbodto.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
-import com.project.pethost.dbo.rating.KeeperRatingDbo;
 import com.project.pethost.exception.CityOutOfBoundException;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.form.AppUserForm;
@@ -248,8 +247,8 @@ public class UserController extends WebMvcConfigurationSupport {
                                          animalCategoryPreference);
         userRepository.save(user);
 
-        final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(form.getEmail(), userRepository);
-        ratingRepository.save(ratingDbo);
+        /*final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(form.getEmail(), userRepository);
+        ratingRepository.save(ratingDbo);*/
 
         return user;
     }

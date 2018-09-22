@@ -2,11 +2,13 @@ package com.project.pethost.controller;
 
 
 import com.project.pethost.converter.dbodto.PetDboDtoConverter;
+import com.project.pethost.converter.dbodto.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dto.PetCreationDto;
 import com.project.pethost.dto.PetDto;
+import com.project.pethost.dto.UserDto;
 import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.repository.PetRatingRepository;
 import com.project.pethost.repository.PetRepository;
@@ -45,6 +47,7 @@ public class PetController {
     private final RatingDboFactory ratingDboFactory;
     private final PetDboDtoConverter petDboDtoConverter;
     private PetCreationValidator petCreationValidator;
+    private UserDboDtoConverter userDboDtoConverter;
 
     private DataService dataService;
 
@@ -56,6 +59,7 @@ public class PetController {
                          final RatingDboFactory ratingDboFactory,
                          final PetDboDtoConverter petDboDtoConverter,
                          final PetCreationValidator petCreationValidator,
+                         final UserDboDtoConverter userDboDtoConverter,
                          final DataService dataService) {
         this.userRepository = userRepository;
         this.petRepository = petRepository;
@@ -63,6 +67,7 @@ public class PetController {
         this.ratingDboFactory = ratingDboFactory;
         this.petDboDtoConverter = petDboDtoConverter;
         this.petCreationValidator = petCreationValidator;
+        this.userDboDtoConverter = userDboDtoConverter;
         this.dataService = dataService;
     }
 
@@ -163,24 +168,30 @@ public class PetController {
     }
 
     @PostMapping("/createPet")
-    public String savePet(@ModelAttribute @Valid final PetCreationDto form, final Model model, final BindingResult result,//
-                          final RedirectAttributes redirectAttributes) {
+    public String savePet(@ModelAttribute @Valid final PetCreationDto form,
+                          final Model model,
+                          final BindingResult result,
+                          final RedirectAttributes redirectAttributes,
+                          @AuthenticationPrincipal final Principal principal) {
         final PetDto pet = form.getPets().get(0);
 
         // Validate result
         if (result.hasErrors()) {
             return "createPetFormPage";
         }
+        final UserDbo currentUser = getCurrentUser(principal);
+        final UserDto currentUserDto = userDboDtoConverter.convertToDto(currentUser);
 
         final PetDto petDto = new PetDto(pet.getName(), pet.getBirthdate(), pet.getCategory(), pet.getDescription(),
-                                         pet.getAvatarUrl());
+                                         pet.getAvatarUrl(), currentUserDto);
         final PetDbo petDbo = petDboDtoConverter.convertToDbo(petDto);
         petDbo.setCreatedDate(LocalDateTime.now());
+
 
         petRepository.save(petDbo);
 
         model.addAttribute("pets", petRepository.findAll());
-        return "redirect:/pets/createPetFormPage";
+        return "Saved";
     }
 
     private UserDbo getCurrentUser(final @AuthenticationPrincipal Principal principal) {

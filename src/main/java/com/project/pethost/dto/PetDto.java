@@ -28,11 +28,13 @@ public class PetDto {
                   final LocalDate birthdate,
                   final AnimalCategoryDto category,
                   final String description,
-                  final String avatarUrl) {
+                  final String avatarUrl,
+                  final UserDto owner) {
         this.name = name;
         this.birthdate = birthdate;
         this.category = category;
         this.description = description;
         this.avatarUrl = avatarUrl;
+        this.owner = owner;
     }
 }

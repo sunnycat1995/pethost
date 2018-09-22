@@ -43,4 +43,8 @@ public class DataService {
     public List<CityDbo> findAllCitiesByName(final String name) {
         return cityRepository.findAllByName(name);
     }
+
+    public AnimalCategoryDbo findByCategory(final String category) {
+        return animalCategoryRepository.findByCategory(category);
+    }
 }

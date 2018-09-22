@@ -25,10 +25,10 @@
             <tr th:each="pet, itemStat : *{pets}">
                 <td><input th:field="*{pets[__${itemStat.index}__].name}" /></td>
                 <td><input type="date" th:field="*{pets[__${itemStat.index}__].birthdate}" /></td>
-                <td><select th:field="*{pets[__${itemStat.index}__].category}">
+                <td><select th:field="*{pets[__${itemStat.index}__].id}">
                     <option value=""> --</option>
                     <option th:each="animalCategory : ${animalCategories}"
-                            th:value="${animalCategory.category}"
+                            th:value="${animalCategory.id}"
                             th:utext="${animalCategory.category}"/>
                 </select></td>
                 <td><textarea th:field="*{pets[__${itemStat.index}__].description}" /></td>

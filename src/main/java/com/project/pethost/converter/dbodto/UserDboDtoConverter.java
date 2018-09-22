@@ -19,6 +19,13 @@ public class UserDboDtoConverter implements DboDtoConverter<UserDbo, UserDto> {
     @Override
     public UserDto convertToDto(final UserDbo userDbo) {
         final UserDto userDto = new UserDto();
+        userDto.setId(userDbo.getId());
+        userDto.setName(userDbo.getName());
+        userDto.setSurname(userDbo.getSurname());
+        userDto.setPatronymic(userDbo.getPatronymic());
+        userDto.setEmail(userDbo.getEmail());
+        userDto.setEnabled(userDbo.getEnabled());
+        userDto.setCreatedDate(userDbo.getCreatedDate());
         return userDto;
     }
 
@@ -27,8 +34,11 @@ public class UserDboDtoConverter implements DboDtoConverter<UserDbo, UserDto> {
         final UserDbo userDbo = new UserDbo();
         userDbo.setId(userDto.getId());
         userDbo.setName(userDto.getName());
+        userDbo.setSurname(userDto.getSurname());
+        userDbo.setPatronymic(userDto.getPatronymic());
         userDbo.setEmail(userDto.getEmail());
-        //userDbo.setPassword(encryptedPasswordUtils.encode(userDto.getPassword()));
+        userDbo.setEnabled(userDto.getEnabled());
+        userDbo.setCreatedDate(userDto.getCreatedDate());
         return userDbo;
     }
 }
