@@ -2,10 +2,14 @@ package com.project.pethost.controller;
 
 import com.project.pethost.converter.GenderEnumConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
+import com.project.pethost.dbo.RoleDbo;
 import com.project.pethost.dbo.UserDbo;
+import com.project.pethost.dbo.UserRoleDbo;
+import com.project.pethost.dbo.UserRoleTypeDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.exception.CityOutOfBoundException;
 import com.project.pethost.form.AppUserForm;
+import com.project.pethost.repository.RoleRepository;
 import com.project.pethost.repository.UserRepository;
 import com.project.pethost.repository.UserRoleRepository;
 import com.project.pethost.service.DataService;
@@ -47,17 +51,20 @@ public class UserController extends WebMvcConfigurationSupport {
     private final AppUserValidator appUserValidator;
     private final DataService dataService;
     private final UserRoleRepository userRoleRepository;
+    private final RoleRepository roleRepository;
 
 
     @Autowired
     public UserController(final UserRepository userRepository,
                           final AppUserValidator appUserValidator,
                           final DataService dataService,
-                          final UserRoleRepository userRoleRepository) {
+                          final UserRoleRepository userRoleRepository,
+                          final RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.appUserValidator = appUserValidator;
         this.dataService = dataService;
         this.userRoleRepository = userRoleRepository;
+        this.roleRepository = roleRepository;
     }
 
     // Set a form validator
@@ -159,6 +166,7 @@ public class UserController extends WebMvcConfigurationSupport {
         UserDbo newUser;
         try {
             newUser = createAppUser(appUserForm);
+            createUserRole(newUser);
             redirectAttributes.addFlashAttribute("flashUser", newUser);
         }
         // Other error!!
@@ -215,10 +223,15 @@ public class UserController extends WebMvcConfigurationSupport {
                                          animalCategoryPreference);
         userRepository.save(user);
 
-        /*final UserRoleDbo userRole = new UserRoleDbo();
-        userRole.setId();
-        userRoleRepository.save(userRole);*/
-
         return user;
+    }
+
+    private void createUserRole(final UserDbo user) {
+        final UserRoleDbo userRole = new UserRoleDbo();
+        userRole.setUserId(userRepository.findByEmail(user.getEmail()).getId());
+        final UserRoleTypeDbo roleUser = UserRoleTypeDbo.ROLE_USER;
+        final RoleDbo roleDbo = roleRepository.findByRole(roleUser);
+        userRole.setRoleId(roleDbo.getId());
+        userRoleRepository.save(userRole);
     }
 }
