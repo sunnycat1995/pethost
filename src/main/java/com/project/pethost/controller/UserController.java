@@ -123,9 +123,15 @@ public class UserController extends WebMvcConfigurationSupport {
         return f;
     }
 
-    @GetMapping(path = "/users")
+    /*@GetMapping(path = "/users")
     public @ResponseBody Iterable<UserDbo> getAllUsers() {
         return userRepository.findAll();
+    }*/
+
+    @GetMapping(path = "/users")
+    public String getAllUsers(final Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "users/allUsersPage";
     }
 
     @RequestMapping(value = "/searchUsersByAnimalPreferences", method = RequestMethod.GET)

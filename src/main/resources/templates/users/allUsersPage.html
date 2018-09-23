@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<h2>My users</h2>
+<table id="customerTable" class="table">
+    <thead>
+    <tr>
+        <th> Id</th>
+        <th> Name</th>
+        <th> Email</th>
+        <th> Phone</th>
+        <th> City</th>
+        <th> Enabled</th>
+        <th> Animal Preferences</th>
+        <th> Created date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${users.empty}">
+        <td colspan="2"> No Users </td>
+    </tr>
+    <tr th:each="user, rowStat : ${users}" th:style="${rowStat.odd} ? 'color: black' : 'color: blue;'">
+        <td><span th:text="${user.id}"> Id </span></td>
+        <td><span th:text="${user.name} + ' ' + ${user.surname}"> Name </span></td>
+        <td><span th:text="${user.email}"> Email </span></td>
+        <td><span th:text="${user?.phone}"> Phone </span></td>
+        <td><span th:text="${user.city.name}"> City </span></td>
+        <td><span th:text="${user.enabled}"> Enabled </span></td>
+        <td>
+            <ul th:each="preference : ${user.animalCategoryPreference}">
+                <li th:text="${preference.category}"> Animal Preferences </li>
+            </ul>
+        </td>
+        <td><span th:text="${user.createdDate}"> Created date </span></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
