@@ -1,18 +1,14 @@
 package com.project.pethost.controller;
 
 import com.project.pethost.converter.GenderEnumConverter;
-import com.project.pethost.converter.dbodto.UserDboDtoConverter;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.exception.CityOutOfBoundException;
-import com.project.pethost.factory.RatingDboFactory;
 import com.project.pethost.form.AppUserForm;
-import com.project.pethost.repository.AnimalCategoryRepository;
-import com.project.pethost.repository.KeeperRatingRepository;
 import com.project.pethost.repository.UserRepository;
+import com.project.pethost.repository.UserRoleRepository;
 import com.project.pethost.service.DataService;
-import com.project.pethost.service.UserServiceImpl;
 import com.project.pethost.util.EncryptedPasswordUtils;
 import com.project.pethost.validator.AppUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,30 +44,20 @@ public class UserController extends WebMvcConfigurationSupport {
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
     private final UserRepository userRepository;
-    private final UserServiceImpl userService;
-    private final UserDboDtoConverter userDboDtoConverter;
-    private final KeeperRatingRepository ratingRepository;
-    private final RatingDboFactory ratingDboFactory;
     private final AppUserValidator appUserValidator;
     private final DataService dataService;
+    private final UserRoleRepository userRoleRepository;
 
 
     @Autowired
     public UserController(final UserRepository userRepository,
-                          final UserServiceImpl userService,
-                          final UserDboDtoConverter userDboDtoConverter,
-                          final KeeperRatingRepository ratingRepository,
-                          final RatingDboFactory ratingDboFactory,
                           final AppUserValidator appUserValidator,
-                          final AnimalCategoryRepository animalCategoryRepository,
-                          final DataService dataService) {
+                          final DataService dataService,
+                          final UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.userDboDtoConverter = userDboDtoConverter;
-        this.ratingRepository = ratingRepository;
-        this.ratingDboFactory = ratingDboFactory;
         this.appUserValidator = appUserValidator;
         this.dataService = dataService;
+        this.userRoleRepository = userRoleRepository;
     }
 
     // Set a form validator
@@ -86,24 +72,6 @@ public class UserController extends WebMvcConfigurationSupport {
             }
         }
     }
-
-    /*@RequestMapping(value = "/signup", method = RequestMethod.GET)
-    public String showRegistrationForm(WebRequest request, Model model) {
-        UserDto userDto = new UserDto();
-        model.addAttribute("user", userDto);
-        return "registrationPage";
-    }*/
-
-
-    /*@RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String submit(@Valid @ModelAttribute("user") final UserDto userDto,
-                         BindingResult result, ModelMap model) {
-        if (result.hasErrors()) {
-            return "error";
-        }
-        createUserAccount(userDto, result);
-        return "userInfoPage";
-    }*/
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminPage(final Principal principal) {
@@ -214,8 +182,8 @@ public class UserController extends WebMvcConfigurationSupport {
         return "registerSuccessfulPage";
     }
 
-    public UserDbo createAppUser(final AppUserForm form) throws CityOutOfBoundException {
-        final String encrytedPassword = EncryptedPasswordUtils.encode(form.getPassword());
+    private UserDbo createAppUser(final AppUserForm form) throws CityOutOfBoundException {
+        final String encryptedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
         final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
         final Set<AnimalCategoryDbo> animalCategoryPreference = new HashSet<>();
@@ -241,14 +209,15 @@ public class UserController extends WebMvcConfigurationSupport {
 
         final CityDbo cityDbo = cities.get(0);
 
-        final UserDbo user = new UserDbo(encrytedPassword,
+        final UserDbo user = new UserDbo(encryptedPassword,
                                          form.getFirstName(), form.getLastName(), form.getEmail(), form.getGender(),
                                          cityDbo,
                                          animalCategoryPreference);
         userRepository.save(user);
 
-        /*final KeeperRatingDbo ratingDbo = ratingDboFactory.createRatingDbo(form.getEmail(), userRepository);
-        ratingRepository.save(ratingDbo);*/
+        /*final UserRoleDbo userRole = new UserRoleDbo();
+        userRole.setId();
+        userRoleRepository.save(userRole);*/
 
         return user;
     }

@@ -1,12 +1,16 @@
 package com.project.pethost.service;
 
 import com.project.pethost.dbo.AnimalCategoryDbo;
+import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.repository.AnimalCategoryRepository;
 import com.project.pethost.repository.CityRepository;
+import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,12 +19,15 @@ import java.util.List;
 public class DataService {
     private final CityRepository cityRepository;
     private final AnimalCategoryRepository animalCategoryRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public DataService(final CityRepository cityRepository,
-                       final AnimalCategoryRepository animalCategoryRepository) {
+                       final AnimalCategoryRepository animalCategoryRepository,
+                       final UserRepository userRepository) {
         this.cityRepository = cityRepository;
         this.animalCategoryRepository = animalCategoryRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -44,7 +51,8 @@ public class DataService {
         return cityRepository.findAllByName(name);
     }
 
-    public AnimalCategoryDbo findByCategory(final String category) {
-        return animalCategoryRepository.findByCategory(category);
+    public UserDbo getCurrentUser(final @AuthenticationPrincipal Principal principal) {
+        final String userName = principal.getName();
+        return userRepository.findByEmail(userName);
     }
 }
