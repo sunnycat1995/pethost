@@ -8,7 +8,7 @@ import com.project.pethost.dbo.UserRoleDbo;
 import com.project.pethost.dbo.UserRoleTypeDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.exception.CityOutOfBoundException;
-import com.project.pethost.form.AppUserForm;
+import com.project.pethost.form.UserCreationForm;
 import com.project.pethost.repository.RoleRepository;
 import com.project.pethost.repository.UserRepository;
 import com.project.pethost.repository.UserRoleRepository;
@@ -74,7 +74,7 @@ public class UserController extends WebMvcConfigurationSupport {
         final Object target = dataBinder.getTarget();
         LOGGER.info("Target=" + target);
         if (target != null) {
-            if (target.getClass() == AppUserForm.class) {
+            if (target.getClass() == UserCreationForm.class) {
                 dataBinder.setValidator(appUserValidator);
             }
         }
@@ -136,7 +136,7 @@ public class UserController extends WebMvcConfigurationSupport {
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String viewRegister(final Model model) {
 
-        final AppUserForm form = new AppUserForm();
+        final UserCreationForm form = new UserCreationForm();
         final List<CityDbo> cityDbos = dataService.cities();
         final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
         model.addAttribute("appUserForm", form);
@@ -151,7 +151,7 @@ public class UserController extends WebMvcConfigurationSupport {
     // has been Validated before this method is invoked.
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public String saveRegister(final Model model, //
-                               final @ModelAttribute("appUserForm") @Valid AppUserForm appUserForm, //
+                               final @ModelAttribute("appUserForm") @Valid UserCreationForm appUserForm, //
                                final BindingResult result, //
                                final RedirectAttributes redirectAttributes) {
         final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();
@@ -174,6 +174,7 @@ public class UserController extends WebMvcConfigurationSupport {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
         catch (final Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
             final List<CityDbo> cityDbos = dataService.cities();
             model.addAttribute("cities", cityDbos);
             model.addAttribute("animalPreferences", animalCategoryDbos);
@@ -190,7 +191,7 @@ public class UserController extends WebMvcConfigurationSupport {
         return "registerSuccessfulPage";
     }
 
-    private UserDbo createAppUser(final AppUserForm form) throws CityOutOfBoundException {
+    private UserDbo createAppUser(final UserCreationForm form) throws CityOutOfBoundException {
         final String encryptedPassword = EncryptedPasswordUtils.encode(form.getPassword());
 
         final List<AnimalCategoryDbo> animalCategoryDbos = dataService.animalCategories();

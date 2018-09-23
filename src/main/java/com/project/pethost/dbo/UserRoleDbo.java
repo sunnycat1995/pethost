@@ -18,5 +18,5 @@ public class UserRoleDbo {
 
     private Long userId;
 
-    private Integer roleId;
+    private Long roleId;
 }

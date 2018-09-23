@@ -1,6 +1,6 @@
 package com.project.pethost.validator;
 
-import com.project.pethost.form.AppUserForm;
+import com.project.pethost.form.UserCreationForm;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.repository.UserRepository;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -26,12 +26,12 @@ public class AppUserValidator implements Validator {
     // The classes are supported by this validator.
     @Override
     public boolean supports(final Class<?> clazz) {
-        return clazz == AppUserForm.class;
+        return clazz == UserCreationForm.class;
     }
 
     @Override
     public void validate(final Object target, final Errors errors) {
-        final AppUserForm appUserForm = (AppUserForm) target;
+        final UserCreationForm appUserForm = (UserCreationForm) target;
 
         // Check the fields of AppUserForm.
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "userName", "not.empty.app.userform.username");

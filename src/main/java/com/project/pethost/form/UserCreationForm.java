@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUserForm {
+public class UserCreationForm {
     private Long userId;
     private String firstName;
     private String lastName;
