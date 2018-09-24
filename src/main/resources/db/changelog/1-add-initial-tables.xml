@@ -146,15 +146,10 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create_order_table" author="vyshnikova">
-        <createTable tableName="order">
-            <column name="id" type="bigint(20)" autoIncrement="true">
+    <changeSet id="create_request_table" author="vyshnikova">
+        <createTable tableName="request">
+            <column name="id" type="bigint(20)">
                 <constraints primaryKey="true"/>
-            </column>
-            <column name="keeper_id" type="bigint(20)">
-                <constraints foreignKeyName="user_fk_keeper_id"
-                             referencedColumnNames="id"
-                             referencedTableName="user"/>
             </column>
             <column name="status_id" type="bigint(3)">
                 <constraints foreignKeyName="status_fk_status_id"
@@ -168,7 +163,7 @@
             </column>
             <column name="createdDate" type="timestamp"/>
             <column name="bookingDate" type="timestamp"/>
-            <column name="lastModifiedDate" type="date"/>
+            <column name="lastModifiedDate" type="timestamp"/>
             <column name="comments" type="varchar(500)"/>
         </createTable>
     </changeSet>
