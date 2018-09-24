@@ -48,10 +48,9 @@ public class OrderController {
     @GetMapping(path = "/orders")
     public String myOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
         final UserDbo currentUser = dataService.getCurrentUser(principal);
-        final OrderStatusDbo requestedOrderStatus = dataService.findByStatus("Requested");
         final List<OrderDbo> orders = orderRepository.findAllByPetOwner(currentUser);
         model.addAttribute("orders", orders);
-        return "orders/allActiveOrdersPage";
+        return "orders/waitingOrdersPage";
     }
 
     @GetMapping(value = "/createOrder")
@@ -89,9 +88,9 @@ public class OrderController {
 
     @GetMapping(path = "/waitingOrders")
     public String waitingOrders(final Model model) {
-        final Iterable<OrderDbo> orders = orderRepository.findAll();
+        final List<OrderDbo> orders = orderRepository.findAllByStatus(dataService.findByStatus("Requested"));
         model.addAttribute("orders", orders);
-        return "orders/allActiveOrdersPage";
+        return "orders/waitingOrdersPage";
     }
 
     @RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)

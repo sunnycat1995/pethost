@@ -216,11 +216,27 @@
     </changeSet>-->
     <changeSet id="create_user_animal_category_table" author="vyshnikova">
         <sql>CREATE TABLE user_animal_category (
-                user_id bigint(20) NOT NULL,
-                animal_category_preference_id int(11) NOT NULL,
-                PRIMARY KEY (user_id, animal_category_preference_id),
-                UNIQUE KEY UK_pnrwst94y1mtusgs65d7c81l (user_id, animal_category_preference_id)
-            )</sql>
+            user_id bigint(20) NOT NULL,
+            animal_category_preference_id int(11) NOT NULL,
+            PRIMARY KEY (user_id, animal_category_preference_id),
+            UNIQUE KEY UK_pnrwst94y1mtusgs65d7c81l (user_id, animal_category_preference_id)
+            )
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_review_table" author="vyshnikova">
+        <sql>
+            CREATE TABLE review (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            order_id bigint(20) DEFAULT NULL,
+            review varchar(1000) DEFAULT NULL,
+            keeper_rating bigint(20) DEFAULT NULL,
+            pet_rating bigint(20) DEFAULT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY UK_tiskff7r4st2lhquiwdt9s0be (id, order_id),
+            CONSTRAINT order_fk_order_id FOREIGN KEY (order_id) REFERENCES request (id)
+            )
+        </sql>
     </changeSet>
 
 </databaseChangeLog>

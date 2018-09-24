@@ -1,6 +1,8 @@
 package com.project.pethost.dbo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.pethost.constant.Constants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -41,22 +44,26 @@ public class OrderDbo {
     @NotNull
     private PetDbo pet;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
     @NotNull
     private String comments;
+
+    @OneToOne(optional = false, mappedBy = "order")
+    @JsonIgnore
+    private ReviewDbo reviewDbo;
 }

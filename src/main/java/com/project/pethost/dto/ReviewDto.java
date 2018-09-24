@@ -7,6 +7,6 @@ public class ReviewDto {
     private Long id;
     private OrderDto order;
     private String review;
-    private int keeperRating;
-    private int petRating;
+    private Integer keeperRating;
+    private Integer petRating;
 }

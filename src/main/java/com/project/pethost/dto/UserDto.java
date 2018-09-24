@@ -1,6 +1,7 @@
 package com.project.pethost.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.pethost.constant.Constants;
 import com.project.pethost.dto.location.CityDto;
 import com.project.pethost.dto.location.DistrictDto;
 import lombok.Data;
@@ -43,7 +44,7 @@ public class UserDto {
     private List<AnimalCategoryDto> animalCategoryPreference;
     private List<PetDto> pets;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
 }

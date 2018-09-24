@@ -1,5 +1,6 @@
 package com.project.pethost.converter.dbodto;
 
+import com.project.pethost.constant.Constants;
 import com.project.pethost.dbo.AnimalCategoryDbo;
 import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dto.PetDto;
@@ -25,7 +26,7 @@ public class PetDboDtoConverter implements DboDtoConverter<PetDbo, PetDto> {
     public PetDto convertToDto(final PetDbo dbo) {
         final PetDto dto = new PetDto();
         dto.setName(dbo.getName());
-        dto.setBirthdate(dbo.getBirthdate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        dto.setBirthdate(dbo.getBirthdate().format(DateTimeFormatter.ofPattern(Constants.DATE_FORMAT)));
         dto.setDescription(dbo.getDescription());
         dto.setAvatarUrl(dbo.getAvatarUrl());
         return dto;

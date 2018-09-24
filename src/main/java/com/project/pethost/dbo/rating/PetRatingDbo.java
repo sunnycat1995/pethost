@@ -13,6 +13,6 @@ import javax.persistence.Table;
 @Table(name = "pet_rating")
 public class PetRatingDbo extends RatingDbo{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

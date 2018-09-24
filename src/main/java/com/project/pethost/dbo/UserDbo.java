@@ -2,6 +2,7 @@ package com.project.pethost.dbo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.pethost.constant.Constants;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.dbo.location.DistrictDbo;
 import com.project.pethost.validator.ValidEmail;
@@ -103,7 +104,7 @@ public class UserDbo {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner")
     private Set<PetDbo> pets;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;
 

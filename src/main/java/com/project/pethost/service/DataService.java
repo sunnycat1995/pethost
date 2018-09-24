@@ -72,4 +72,9 @@ public class DataService {
     public OrderStatusDbo findByStatus(final String status) {
         return orderStatusRepository.findByStatus(status);
     }
+
+    public Double recalculateRating(final Double oldRating, final Long counter, final Integer userRating) {
+        final Double newRating = (oldRating * counter + userRating) / (counter + 1);
+        return newRating;
+    }
 }
