@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+<h2>Active orders</h2>
+<table>
+    <thead>
+    <tr>
+        <th> Id</th>
+        <th> Order status</th>
+        <th> Pet Id</th>
+        <th> Pet Name</th>
+        <th> Pet Category</th>
+        <th> Keeper Id</th>
+        <th> Keeper Email</th>
+        <th> Keeper Name</th>
+        <th> Keeper Phone</th>
+        <th> Owner Id</th>
+        <th> Owner Email</th>
+        <th> Owner Name</th>
+        <th> Owner Comments</th>
+        <th> Created date</th>
+        <th> Booking date</th>
+        <th> Last modified date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${orders.empty}">
+        <td colspan="2"> No Active Orders </td>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td><span th:text="${order.id}"> Id </span></td>
+        <td><span th:text="${order?.status?.status}"> Order status </span></td>
+        <td><span th:text="${order?.pet?.id}"> Pet Id </span></td>
+        <td><span th:text="${order?.pet?.getName()}"> Pet Name </span></td>
+        <td><span th:text="${order?.pet?.getCategory()?.getCategory()}"> Pet Category </span></td>
+        <td><span th:text="${order.pet.keeper.id}"> Keeper Id </span></td>
+        <td><span th:text="${order.pet.keeper.email}"> Keeper Email </span></td>
+        <td><span th:text="${order.pet.keeper.name} + ' ' + ${order.pet.keeper.surname}"> Keeper Name </span></td>
+        <td><span th:text="${order.pet.keeper.phone}"> Keeper Phone </span></td>
+        <td><span th:text="${order.pet.owner.id}"> Owner Id </span></td>
+        <td><span th:text="${order.pet.owner.email}"> Owner Email </span></td>
+        <td><span th:text="${order.pet.owner.name} + ' ' + ${order.pet.owner.surname}"> Owner Name </span></td>
+        <td><span th:text="${order.comments}"> Owner Comments </span></td>
+        <td><span th:text="${order.createdDate}"> Created date </span></td>
+        <td><span th:text="${order.bookingDate}"> Booking date </span></td>
+        <td><span th:text="${order.lastModifiedDate}"> Last modified date </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
