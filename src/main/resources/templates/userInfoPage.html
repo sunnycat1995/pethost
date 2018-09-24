@@ -13,13 +13,16 @@
 <th:block th:include="/_menu"></th:block>
 
 
-<h2>User Info Page</h2>
-<h3>Welcome : <span th:utext="${#request.userPrincipal.name}"></span></h3>
-<b>This is protected page!</b>
+<h3>Welcome : <span th:utext="${currentUser.name} + ' ' + ${currentUser.surname}"></span></h3>
 
 <br/><br/>
+<h4><b>Personal info</b></h4>
+<p th:utext="'Gender: ' +  ${currentUser.getGender().name()}"/>
+<p th:utext="'Email: ' +  ${currentUser.getEmail()}"/>
+<p th:utext="'City: ' +  ${currentUser.getCity().getName()}"/>
+<!--<p th:utext="'Address: ' +  ${currentUser.getAddress()}"/>-->
+<br/><br/>
 
-<div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
 <div>
     <a th:href="@{/pethost/mypets}">Show my pets</a>
 </div>

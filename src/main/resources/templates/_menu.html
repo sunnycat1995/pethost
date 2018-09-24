@@ -13,9 +13,10 @@
 
     | &nbsp;
 
-    <a th:href="@{/pethost/admin}">Admin</a>
-
-    | &nbsp;
+    <usertag th:if="${#request.userPrincipal != null}">
+        <a th:href="@{/pethost/admin}">Admin</a>
+        | &nbsp;
+    </usertag>
 
     <a th:href="@{/pethost/signup}">SignUp</a>
 

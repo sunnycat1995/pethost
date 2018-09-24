@@ -17,9 +17,7 @@ import com.project.pethost.util.EncryptedPasswordUtils;
 import com.project.pethost.validator.AppUserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -81,9 +79,9 @@ public class UserController extends WebMvcConfigurationSupport {
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String adminPage(final Principal principal) {
+    public String adminPage(final Model model, final Principal principal) {
         if (principal != null) {
-            return "userInfoPage";
+            return performUserInfoPage(model, principal);
         }
         return "loginPage";
     }
@@ -96,17 +94,17 @@ public class UserController extends WebMvcConfigurationSupport {
     @RequestMapping(value = "/userAccountInfo", method = RequestMethod.GET)
     public String userInfo(final Model model, final Principal principal) {
         if (principal != null) {
-            final String userName = principal.getName();
-
-            System.out.println("User Name: " + userName);
-
-            final User loginedUser = (User) ((Authentication) principal).getPrincipal();
-
-            model.addAttribute("userInfo", loginedUser.toString());
-
-            return "userInfoPage";
+            return performUserInfoPage(model, principal);
         }
         return "loginPage";
+    }
+
+    private String performUserInfoPage(final Model model, final Principal principal) {
+        final String userName = principal.getName();
+        LOGGER.info("User Email: " + userName);
+        final UserDbo userDbo = userRepository.findByEmail(userName);
+        model.addAttribute("currentUser", userDbo);
+        return "userInfoPage";
     }
 
     @RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
@@ -122,11 +120,6 @@ public class UserController extends WebMvcConfigurationSupport {
         f.addConverter(new GenderEnumConverter());
         return f;
     }
-
-    /*@GetMapping(path = "/users")
-    public @ResponseBody Iterable<UserDbo> getAllUsers() {
-        return userRepository.findAll();
-    }*/
 
     @GetMapping(path = "/users")
     public String getAllUsers(final Model model) {
