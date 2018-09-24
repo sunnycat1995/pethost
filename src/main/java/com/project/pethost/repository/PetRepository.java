@@ -19,4 +19,5 @@ public interface PetRepository extends CrudRepository<PetDbo, Long> {
     List<PetDbo> findAllByNameAndCategoryAndCreatedDateEquals(final String name,
                                                               final AnimalCategoryDbo animalCategoryDbo,
                                                               final LocalDateTime createdDate);
+    List<PetDbo> findAllByOwnerAndAndProcessed(final UserDbo owner, boolean isProcessed);
 }

@@ -57,7 +57,7 @@ public class OrderController {
     public String createOrder(final Model model, @AuthenticationPrincipal final Principal principal) {
         model.addAttribute("form", new OrderCreationForm());
         final UserDbo currentUser = dataService.getCurrentUser(principal);
-        model.addAttribute("myPets", petRepository.findAllByOwner(currentUser));
+        model.addAttribute("myPets", petRepository.findAllByOwnerAndAndProcessed(currentUser, false));
         return "orders/createOrderPage";
     }
 
@@ -71,7 +71,12 @@ public class OrderController {
         }
         final OrderDbo orderDbo = new OrderDbo();
         final Optional<PetDbo> petDbo = petRepository.findById(form.getPetId());
-        petDbo.ifPresent(orderDbo::setPet);
+        if (petDbo.isPresent()) {
+            final PetDbo pet = petDbo.get();
+            orderDbo.setPet(pet);
+            pet.setProcessed(true);
+            petRepository.save(pet);
+        }
         orderDbo.setCreatedDate(LocalDateTime.now());
         orderDbo.setComments(form.getComments());
         final OrderStatusDbo orderCreatedStatus = dataService.findByStatus("Requested");

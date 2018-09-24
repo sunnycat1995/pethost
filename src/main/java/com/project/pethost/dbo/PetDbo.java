@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,12 +34,13 @@ public class PetDbo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthdate;
 
-    @OneToOne(targetEntity = AnimalCategoryDbo.class)
+    @OneToOne(targetEntity = AnimalCategoryDbo.class, optional = false)
     private AnimalCategoryDbo category;
 
     @ManyToOne
@@ -65,4 +67,7 @@ public class PetDbo {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "pet")
     @JsonIgnore
     private List<OrderDbo> orderDbo;
+
+    @NotNull
+    private boolean processed;
 }
