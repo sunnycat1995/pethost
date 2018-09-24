@@ -1,35 +1,32 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>User Info</title>
+    <title>Order is successfully registered</title>
+    <style>
+        span {color: blue;}
+    </style>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
+
 <body>
+<form action="/pethost/registerSuccessful" th:object="${appUserForm}" method="POST">
 <!-- Include _menu.html -->
 <th:block th:include="/_menu"></th:block>
 
+<h2>Order is successfully registered!</h2>
 
-<h2>User Info Page</h2>
-<h3>Welcome : <span th:utext="${#request.userPrincipal.name}"></span></h3>
-<b>This is protected page!</b>
-
-<br/><br/>
-
-<div th:if="${userInfo != null}" th:utext="${userInfo}"></div>
-<div>
-    <a th:href="@{/pethost/mypets}">Show my pets</a>
+<div th:if="${appUserForm != null}">
+    <ul>
+        <li>Email: <span th:utext="${appUserForm.email}">..</span></li>
+        <li>Name: <span th:utext="${appUserForm.firstName}">..</span></li>
+        <li>Surname: <span th:utext="${appUserForm.lastName}">..</span></li>
+    </ul>
 </div>
-<div>
-    <a th:href="@{/pethost/createPet}">Create pet</a>
-</div>
-<div>
-    <a th:href="@{/pethost/createOrder}">Create order</a>
-</div>
+</form>
 
 </body>
-
 </html>

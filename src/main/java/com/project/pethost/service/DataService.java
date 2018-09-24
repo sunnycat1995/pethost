@@ -1,10 +1,12 @@
 package com.project.pethost.service;
 
 import com.project.pethost.dbo.AnimalCategoryDbo;
+import com.project.pethost.dbo.OrderStatusDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.dbo.location.CityDbo;
 import com.project.pethost.repository.AnimalCategoryRepository;
 import com.project.pethost.repository.CityRepository;
+import com.project.pethost.repository.OrderStatusRepository;
 import com.project.pethost.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,14 +22,17 @@ public class DataService {
     private final CityRepository cityRepository;
     private final AnimalCategoryRepository animalCategoryRepository;
     private final UserRepository userRepository;
+    private final OrderStatusRepository orderStatusRepository;
 
     @Autowired
     public DataService(final CityRepository cityRepository,
                        final AnimalCategoryRepository animalCategoryRepository,
-                       final UserRepository userRepository) {
+                       final UserRepository userRepository,
+                       final OrderStatusRepository orderStatusRepository) {
         this.cityRepository = cityRepository;
         this.animalCategoryRepository = animalCategoryRepository;
         this.userRepository = userRepository;
+        this.orderStatusRepository = orderStatusRepository;
     }
 
 
@@ -47,6 +52,14 @@ public class DataService {
         return cityDbos;
     }
 
+    public List<OrderStatusDbo> orderStatuses() {
+        final Iterable<OrderStatusDbo> orderStatuses = orderStatusRepository.findAll();
+        final List<OrderStatusDbo> orderStatusDbos = new ArrayList<>();
+        orderStatuses.forEach(orderStatusDbos::add);
+        orderStatusDbos.sort(Comparator.comparing(OrderStatusDbo::getStatus));
+        return orderStatusDbos;
+    }
+
     public List<CityDbo> findAllCitiesByName(final String name) {
         return cityRepository.findAllByName(name);
     }
@@ -54,5 +67,9 @@ public class DataService {
     public UserDbo getCurrentUser(final @AuthenticationPrincipal Principal principal) {
         final String userName = principal.getName();
         return userRepository.findByEmail(userName);
+    }
+
+    public OrderStatusDbo findByStatus(final String status) {
+        return orderStatusRepository.findByStatus(status);
     }
 }

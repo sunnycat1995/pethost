@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+<form th:action="@{/pethost/createOrder}" th:object="${form}" method="POST">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table>
+            <thead>
+            <tr>
+                <th> Pet</th>
+                <th> Comments</th>
+            </tr>
+            </thead>
+            <tbody>
+                <td><select th:field="*{petId}">
+                    <option value=""> --</option>
+                    <option th:each="pet : ${myPets}"
+                            th:value="${pet.id}"
+                            th:utext="${pet.name}"/>
+                </select></td>
+                <td><textarea th:field="*{comments}" /></td>
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+</body>
+</html>

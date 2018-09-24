@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class OrderDbo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -43,17 +44,19 @@ public class OrderDbo {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @NotNull
+    @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    @NotNull
+    @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
+    @NotNull
     private String comments;
 }
