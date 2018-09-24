@@ -92,7 +92,7 @@
         <sql>
             insert into order_status(id, status) values
             (1, "Requested"),
-            (2, "In agreenment"),
+            (2, "In agreement"),
             (3, "In safe hands"),
             (4, "Resolved"),
             (5, "Unknown")
@@ -131,20 +131,26 @@
     </changeSet>
 
     <changeSet id="create_pet_table" author="vyshnikova">
-        <createTable tableName="pet">
-            <column name="id" type="bigint(20)" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="name" type="varchar(50)"/>
-            <column name="birthdate" type="date"/>
-            <column name="category_id" type="bigint(3)"/>
-            <column name="owner_id" type="bigint(20)"/>
-            <column name="keeper_id" type="bigint(20)"/>
-            <column name="description" type="varchar(500)"/>
-            <column name="avatar_url" type="varchar(500)"/>
-            <column name="created_date" type="timestamp"/>
-            <column name="processed" type="boolean" defaultValueBoolean="false" />
-        </createTable>
+        <sql>
+            CREATE TABLE pet (
+            id bigint(20) NOT NULL AUTO_INCREMENT,
+            name varchar(50) DEFAULT NULL,
+            birthdate date DEFAULT NULL,
+            category_id bigint(20) DEFAULT NULL,
+            owner_id bigint(20) DEFAULT NULL,
+            keeper_id bigint(20) DEFAULT NULL,
+            description varchar(500) DEFAULT NULL,
+            avatar_url varchar(500) DEFAULT NULL,
+            created_date timestamp NULL DEFAULT NULL,
+            processed bit(1) DEFAULT b'0',
+            PRIMARY KEY (id),
+            UNIQUE KEY UK_5495qso2nma69d36bexnpceec (id, category_id),
+            KEY keeper_fk_keeper_id (keeper_id),
+            KEY owner_fk_owner_id (owner_id),
+            CONSTRAINT FKnqa9w1orpo08gctyul8oexunl FOREIGN KEY (category_id) REFERENCES animal_category (id),
+            CONSTRAINT keeper_fk_keeper_id FOREIGN KEY (keeper_id) REFERENCES user (id),
+            CONSTRAINT owner_fk_owner_id FOREIGN KEY (owner_id) REFERENCES user (id))
+        </sql>
     </changeSet>
 
     <changeSet id="create_request_table" author="vyshnikova">

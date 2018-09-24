@@ -6,7 +6,6 @@ import com.project.pethost.dbo.PetDbo;
 import com.project.pethost.dbo.UserDbo;
 import com.project.pethost.form.OrderCreationForm;
 import com.project.pethost.repository.OrderRepository;
-import com.project.pethost.repository.OrderStatusRepository;
 import com.project.pethost.repository.PetRepository;
 import com.project.pethost.service.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -39,16 +39,17 @@ public class OrderController {
     @Autowired
     public OrderController(final OrderRepository orderRepository,
                            final PetRepository petRepository,
-                           final DataService dataService,
-                           final OrderStatusRepository orderStatusRepository) {
+                           final DataService dataService) {
         this.orderRepository = orderRepository;
         this.dataService = dataService;
         this.petRepository = petRepository;
     }
 
     @GetMapping(path = "/orders")
-    public String allOrders(final Model model) {
-        final Iterable<OrderDbo> orders = orderRepository.findAll();
+    public String myOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
+        final UserDbo currentUser = dataService.getCurrentUser(principal);
+        final OrderStatusDbo requestedOrderStatus = dataService.findByStatus("Requested");
+        final List<OrderDbo> orders = orderRepository.findAllByPetOwner(currentUser);
         model.addAttribute("orders", orders);
         return "orders/allActiveOrdersPage";
     }
@@ -86,9 +87,11 @@ public class OrderController {
         return "redirect:orders";
     }
 
-    @RequestMapping(value = "/waitingOrders", method = RequestMethod.GET)
-    public @ResponseBody String waitingOrders() {
-        return "Returned all waiting orders";
+    @GetMapping(path = "/waitingOrders")
+    public String waitingOrders(final Model model) {
+        final Iterable<OrderDbo> orders = orderRepository.findAll();
+        model.addAttribute("orders", orders);
+        return "orders/allActiveOrdersPage";
     }
 
     @RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)

@@ -5,7 +5,7 @@
 
     | &nbsp;
 
-    <a th:href="@{/pethost/orders}">Orders</a>
+    <a th:href="@{/pethost/waitingOrders}">Waiting orders</a>
 
     | &nbsp;
 
@@ -24,6 +24,11 @@
     <a th:href="@{/pethost/users}">Users</a>
 
     | &nbsp;
+
+    <usertag th:if="${#request.userPrincipal != null}">
+        <a th:href="@{/pethost/orders}">My orders</a>
+        | &nbsp;
+    </usertag>
 
     <a th:if="${#request.userPrincipal != null}" th:href="@{/pethost/logoutSuccessful}">Logout</a>
 
