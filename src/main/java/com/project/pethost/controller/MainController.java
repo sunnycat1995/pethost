@@ -1,5 +1,6 @@
 package com.project.pethost.controller;
 
+import com.project.pethost.converter.dbodto.OrderDboDtoConverter;
 import com.project.pethost.dbo.ReviewDbo;
 import com.project.pethost.dbo.rating.KeeperRatingDbo;
 import com.project.pethost.dbo.rating.PetRatingDbo;
@@ -32,16 +33,19 @@ public class MainController extends WebMvcConfigurationSupport {
     private final KeeperRatingRepository keeperRatingRepository;
     private final PetRatingRepository petRatingRepository;
     private final DataService dataService;
+    private final OrderDboDtoConverter orderDboDtoConverter;
 
     @Autowired
     public MainController(final ReviewRepository reviewRepository,
                           final KeeperRatingRepository keeperRatingRepository,
                           final PetRatingRepository petRatingRepository,
-                          final DataService dataService) {
+                          final DataService dataService,
+                          final OrderDboDtoConverter orderDboDtoConverter) {
         this.reviewRepository = reviewRepository;
         this.keeperRatingRepository = keeperRatingRepository;
         this.petRatingRepository = petRatingRepository;
         this.dataService = dataService;
+        this.orderDboDtoConverter = orderDboDtoConverter;
     }
 
     @RequestMapping(value = {"", "/", "/welcome"}, method = RequestMethod.GET)
@@ -66,6 +70,7 @@ public class MainController extends WebMvcConfigurationSupport {
         reviewDbo.setReview(form.getReview());
         reviewDbo.setKeeperRating(form.getKeeperRating());
         reviewDbo.setPetRating(form.getPetRating());
+        reviewDbo.setOrder(orderDboDtoConverter.convertToDbo(form.getOrder()));
         reviewRepository.save(reviewDbo);
 
         recalculateRating(form);
@@ -74,7 +79,7 @@ public class MainController extends WebMvcConfigurationSupport {
     }
 
 
-    public void recalculateRating(final ReviewDto form) {
+    private void recalculateRating(final ReviewDto form) {
         final Optional<KeeperRatingDbo> keeperRatingDbo = keeperRatingRepository.findById(form.getOrder().getOwnerId());
         if (keeperRatingDbo.isPresent()) {
             final KeeperRatingDbo ratingDbo = keeperRatingDbo.get();
