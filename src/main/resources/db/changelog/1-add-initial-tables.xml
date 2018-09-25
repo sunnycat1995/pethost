@@ -92,10 +92,11 @@
         <sql>
             insert into order_status(id, status) values
             (1, "Requested"),
-            (2, "In agreement"),
-            (3, "In safe hands"),
-            (4, "Resolved"),
-            (5, "Unknown")
+            (2, "Pending confirmation"),
+            (3, "In agreement"),
+            (4, "In safe hands"),
+            (5, "Resolved"),
+            (6, "Unknown")
         </sql>
     </changeSet>
 

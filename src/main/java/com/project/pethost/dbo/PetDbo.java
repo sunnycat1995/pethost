@@ -55,6 +55,7 @@ public class PetDbo {
     @JoinColumn(name = "keeper_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonIgnore
     private UserDbo keeper;
 
     private String description;

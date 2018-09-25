@@ -104,6 +104,10 @@ public class UserDbo {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner")
     private Set<PetDbo> pets;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "keeper")
+    @JsonIgnore
+    private Set<PetDbo> pets1;
+
     @JsonFormat(pattern = Constants.DATE_TIME_FORMAT)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdDate;

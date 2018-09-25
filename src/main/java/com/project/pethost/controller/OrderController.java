@@ -45,10 +45,20 @@ public class OrderController {
         this.petRepository = petRepository;
     }
 
-    @GetMapping(path = "/orders")
-    public String myOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
+    @GetMapping(path = "/outcomingOrders")
+    public String myOutcomingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
         final UserDbo currentUser = dataService.getCurrentUser(principal);
         final List<OrderDbo> orders = orderRepository.findAllByPetOwner(currentUser);
+        model.addAttribute("title", "My outcoming orders");
+        model.addAttribute("orders", orders);
+        return "orders/waitingOrdersPage";
+    }
+
+    @GetMapping(path = "/incomingOrders")
+    public String myIncomingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
+        final UserDbo currentUser = dataService.getCurrentUser(principal);
+        final List<OrderDbo> orders = orderRepository.findAllByPetKeeper(currentUser);
+        model.addAttribute("title", "My incoming orders");
         model.addAttribute("orders", orders);
         return "orders/waitingOrdersPage";
     }
@@ -83,14 +93,18 @@ public class OrderController {
         orderDbo.setStatus(orderCreatedStatus);
         orderRepository.save(orderDbo);
 
-        return "redirect:orders";
+        return "redirect:outcomingOrders";
     }
 
     @GetMapping(path = "/waitingOrders")
-    public String waitingOrders(final Model model) {
+    public String waitingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
+        model.addAttribute("title", "Active orders");
         final List<OrderDbo> orders = orderRepository.findAllByStatus(dataService.findByStatus("Requested"));
         model.addAttribute("orders", orders);
-        return "orders/waitingOrdersPage";
+        if (principal != null) {
+            return "orders/waitingOrdersPage";
+        }
+        else return "orders/waitingOrdersForNotLoggedUserPage";
     }
 
     @RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)

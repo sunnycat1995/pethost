@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderRepository extends CrudRepository<OrderDbo, Long> {
     List<OrderDbo> findAllByStatus(final OrderStatusDbo orderStatusDbo);
     List<OrderDbo> findAllByPetOwner(final UserDbo currentUser);
+    List<OrderDbo> findAllByPetKeeper(final UserDbo keeper);
 }

@@ -18,20 +18,10 @@
     <tr>
         <th> Id</th>
         <th> Order status</th>
-        <th> Pet Id</th>
         <th> Pet Name</th>
         <th> Pet Category</th>
-        <th> Keeper Id</th>
-        <th> Keeper Email</th>
-        <th> Keeper Name</th>
-        <th> Keeper Phone</th>
-        <th> Owner Id</th>
-        <th> Owner Email</th>
-        <th> Owner Name</th>
         <th> Owner Comments</th>
         <th> Created date</th>
-        <th> Booking date</th>
-        <th> Last modified date</th>
     </tr>
     </thead>
     <tbody>
@@ -41,20 +31,10 @@
     <tr th:each="order : ${orders}">
         <td><span th:text="${order.id}"> Id </span></td>
         <td><span th:text="${order?.status?.status}"> Order status </span></td>
-        <td><span th:text="${order?.pet?.id}"> Pet Id </span></td>
         <td><span th:text="${order?.pet?.getName()}"> Pet Name </span></td>
         <td><span th:text="${order?.pet?.getCategory()?.getCategory()}"> Pet Category </span></td>
-        <td><span th:text="${order?.pet?.keeper?.id}"> Keeper Id </span></td>
-        <td><span th:text="${order?.pet?.keeper?.email}"> Keeper Email </span></td>
-        <td><span th:text="${order?.pet?.keeper?.name} + ' ' + ${order?.pet?.keeper?.surname}"> Keeper Name </span></td>
-        <td><span th:text="${order?.pet?.keeper?.phone}"> Keeper Phone </span></td>
-        <td><span th:text="${order.pet.owner.id}"> Owner Id </span></td>
-        <td><span th:text="${order.pet.owner.email}"> Owner Email </span></td>
-        <td><span th:text="${order.pet.owner.name} + ' ' + ${order.pet.owner.surname}"> Owner Name </span></td>
         <td><span th:text="${order.comments}"> Owner Comments </span></td>
         <td><span th:text="${order.createdDate}"> Created date </span></td>
-        <td><span th:text="${order?.bookingDate}"> Booking date </span></td>
-        <td><span th:text="${order?.lastModifiedDate}"> Last modified date </span></td>
     </tr>
     </tbody>
 </table>
