@@ -18,7 +18,7 @@
 <br/><br/>
 <h4><b>Personal info</b></h4>
 <p th:utext="'Gender: ' +  ${currentUser.getGender().name()}"/>
-<p th:utext="'Email: ' +  ${currentUser.getEmail()}"/>
+<p id="email" th:utext="'Email: ' +  ${currentUser.getEmail()}"/>
 <p th:utext="'City: ' +  ${currentUser.getCity().getName()}"/>
 <!--<p th:utext="'Address: ' +  ${currentUser.getAddress()}"/>-->
 <br/><br/>
