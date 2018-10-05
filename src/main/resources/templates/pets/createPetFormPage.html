@@ -8,40 +8,68 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .maindiv {
+            width: 80%;
+            margin-left: 10%;
+        }
+    </style>
 </head>
 <body>
 <!-- Include _menu.html -->
 <th:block th:include="/_menu"></th:block>
-<form th:action="@{/pethost/createPet}" th:object="${form}" method="POST">
-    <fieldset>
-        <input type="submit" id="submitButton" th:value="Save">
-        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
-        <table>
-            <thead>
-            <tr>
-                <th> Name</th>
-                <th> Birthdate</th>
-                <th> Category</th>
-                <th> Description</th>
-                <th> Avatar url</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="pet, itemStat : *{pets}">
-                <td><input th:field="*{pets[__${itemStat.index}__].name}" /></td>
-                <td><input type="date" th:field="*{pets[__${itemStat.index}__].birthdate}" /></td>
-                <td><select th:field="*{pets[__${itemStat.index}__].category}">
-                    <option value=""> --</option>
-                    <option th:each="animalCategory : ${animalCategories}"
-                            th:value="${animalCategory.id}"
-                            th:utext="${animalCategory.category}"/>
-                </select></td>
-                <td><textarea th:field="*{pets[__${itemStat.index}__].description}" /></td>
-                <td><input th:field="*{pets[__${itemStat.index}__].avatarUrl}" /></td>
-            </tr>
-            </tbody>
-        </table>
-    </fieldset>
+<h2 class="maindiv">Create new pet</h2>
+
+<form class="maindiv" th:action="@{/pethost/createPet}" th:object="${form}" method="POST">
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        <tr th:each="pet, itemStat : *{pets}">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputName">Name</label>
+                    <input th:field="*{pets[__${itemStat.index}__].name}" class="form-control" id="inputName"
+                           placeholder="Name">
+                </div>
+            </div>
+            <div class="form-group" width="2">
+                <label for="avatar_url">Birthdate</label>
+                <input th:field="*{pets[__${itemStat.index}__].birthdate}" type="date" class="form-control"
+                       id="birthdate"
+                       placeholder="Birthdate" >
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputAnimalCategory">Category</label>
+                    <select th:field="*{pets[__${itemStat.index}__].category}" id="inputAnimalCategory"
+                            class="form-control">
+                        <option value="" selected>Choose...</option>
+                        <option th:each="animalCategory : ${animalCategories}"
+                                th:value="${animalCategory.id}"
+                                th:utext="${animalCategory.category}"/>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea th:field="*{pets[__${itemStat.index}__].description}" class="form-control" id="description"
+                          rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="avatar_url">Avatar url</label>
+                <input th:field="*{pets[__${itemStat.index}__].avatarUrl}" type="text" class="form-control"
+                       id="avatar_url" placeholder="Avatar Url">
+            </div>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <button type="reset" id="cancelButton" class="btn btn-light">Cancel</button>
+        <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
+    </div>
 </form>
+
 </body>
 </html>
