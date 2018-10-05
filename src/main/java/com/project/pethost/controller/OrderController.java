@@ -45,7 +45,7 @@ public class OrderController {
         this.petRepository = petRepository;
     }
 
-    @GetMapping(path = "/outcomingOrders")
+    @GetMapping(path = "/outgoingOrders")
     public String myOutcomingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
         final UserDbo currentUser = dataService.getCurrentUser(principal);
         final List<OrderDbo> orders = orderRepository.findAllByPetOwner(currentUser);
