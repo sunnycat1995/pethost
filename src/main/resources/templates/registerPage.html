@@ -23,106 +23,108 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .maindiv {
+            width: 50%;
+            margin-left: 30%;
+        }
+    </style>
 </head>
 <body>
 <!-- Include _menu.html -->
 <th:block th:include="/_menu"></th:block>
+<div class="maindiv">
+    <h2>Registration</h2>
 
-<h2>Register</h2>
+    <div th:if="${errorMessage != null}"
+         th:utext="${errorMessage}" class="error">...
+    </div>
 
-<div th:if="${errorMessage != null}"
-     th:utext="${errorMessage}" class="error">...
+    <form th:action="@{/pethost/signup}" th:object="${appUserForm}" method="POST">
+        <table>
+            <tr>
+                <td>Email</td>
+                <td><input type="text" th:field="*{email}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" th:field="*{password}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Confirm password</td>
+                <td><input type="password" th:field="*{confirmPassword}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>First Name</td>
+                <td><input type="text" th:field="*{firstName}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td><input type="text" th:field="*{lastName}"/></td>
+                <td>
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>
+                    <select th:field="*{gender}">
+                        <option value="NO_CHOSEN"> --</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
+                </td>
+                <td>
+                    <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">..</span>
+                </td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>
+                    <select th:field="*{countryCode}">
+                        <option value=""> --</option>
+                        <option th:each="city : ${cities}"
+                                th:value="${city.name}"
+                                th:utext="${city.name}"/>
+                    </select>
+                <td><span th:if="${#fields.hasErrors('countryCode')}" th:errors="*{countryCode}">..</span></td>
+            </tr>
+
+            <tr>
+                <td>Animal preferences</td>
+                <td>
+                    <ul>
+                        <li th:each="checkboxValue : ${animalPreferences}">
+                            <input type="checkbox"
+                                   th:field="*{animalPreferences}"
+                                   th:value="${checkboxValue.category}"/>
+                            <label
+                                    th:for="${#ids.prev('animalPreferences')}"
+                                    th:text="${checkboxValue.category}"></label>
+                        </li>
+                    </ul>
+                </td>
+                <td><span th:if="${#fields.hasErrors('animalPreferences')}" th:errors="*{animalPreferences}">..</span></td>
+            </tr>
+
+        </table>
+        <div>
+            <a th:href="@{/pethost}">Cancel</a>
+            <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
 </div>
-
-<form th:action="@{/pethost/signup}" th:object="${appUserForm}" method="POST">
-    <table>
-        <tr>
-            <td>Email</td>
-            <td><input type="text" th:field="*{email}"/></td>
-            <td>
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" th:field="*{password}"/></td>
-            <td>
-                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Confirm password</td>
-            <td><input type="password" th:field="*{confirmPassword}"/></td>
-            <td>
-                <span th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>First Name</td>
-            <td><input type="text" th:field="*{firstName}"/></td>
-            <td>
-                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Last Name</td>
-            <td><input type="text" th:field="*{lastName}"/></td>
-            <td>
-                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>Gender</td>
-            <td>
-                <select th:field="*{gender}">
-                    <option value="NO_CHOSEN"> --</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                </select>
-            </td>
-            <td>
-                <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">..</span>
-            </td>
-        </tr>
-        <tr>
-            <td>City</td>
-            <td>
-                <select th:field="*{countryCode}">
-                    <option value=""> --</option>
-                    <option th:each="city : ${cities}"
-                            th:value="${city.name}"
-                            th:utext="${city.name}"/>
-                </select>
-            <td><span th:if="${#fields.hasErrors('countryCode')}" th:errors="*{countryCode}">..</span></td>
-        </tr>
-
-        <tr>
-            <td>Animal preferences</td>
-            <td>
-                <ul>
-                    <li th:each="checkboxValue : ${animalPreferences}">
-                        <input type="checkbox"
-                               th:field="*{animalPreferences}"
-                               th:value="${checkboxValue.category}"/>
-                        <label
-                                th:for="${#ids.prev('animalPreferences')}"
-                                th:text="${checkboxValue.category}"></label>
-                    </li>
-                </ul>
-            </td>
-                 <td><span th:if="${#fields.hasErrors('animalPreferences')}" th:errors="*{animalPreferences}">..</span></td>
-        </tr>
-
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-                <input type="submit" value="Submit"/>
-                <a th:href="@{/pethost}">Cancel</a>
-            </td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
-</form>
-
 </body>
 </html>
