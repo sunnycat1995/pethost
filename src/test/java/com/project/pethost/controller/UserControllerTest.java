@@ -1,15 +1,8 @@
 package com.project.pethost.controller;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserControllerTest {
@@ -22,7 +15,7 @@ public class UserControllerTest {
         this.driver = new FirefoxDriver();
     }
 
-    @Before
+    /*@Before
     public void setup() {
         driver.navigate().to("http://localhost:8091/pethost");
         sleep();
@@ -46,6 +39,7 @@ public class UserControllerTest {
         }
         final WebElement emailInfo = driver.findElement(By.id("email"));
         Assert.assertEquals("Incorrect user", TEST_USERNAME, emailInfo.getText().replace("Email:", "").trim());
+        driver.quit();
     }
 
     private void fillSignInPage(final String username, final String password) {
@@ -104,5 +98,5 @@ public class UserControllerTest {
             LOGGER.log(Level.SEVERE, "Time out exception");
             throw new RuntimeException("Time out exception");
         }
-    }
+    }*/
 }

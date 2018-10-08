@@ -12,7 +12,7 @@ public class GenderEnumConverter implements Converter<String, GenderDbo> {
     @Override
     public GenderDbo convert(final String source) {
         try {
-            return GenderDbo.valueOf(source);
+            return GenderDbo.valueOf(source.toUpperCase());
         } catch (final Exception e) {
             LOGGER.log(Level.SEVERE, "Incorrect gender value " + source);
             return GenderDbo.NO_CHOSEN;

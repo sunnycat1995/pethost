@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping(path = "/outgoingOrders")
-    public String myOutcomingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
+    public String myOutgoingOrders(final Model model, @AuthenticationPrincipal final Principal principal) {
         final UserDbo currentUser = dataService.getCurrentUser(principal);
         final List<OrderDbo> orders = orderRepository.findAllByPetOwner(currentUser);
         model.addAttribute("title", "My outcoming orders");
@@ -93,7 +93,7 @@ public class OrderController {
         orderDbo.setStatus(orderCreatedStatus);
         orderRepository.save(orderDbo);
 
-        return "redirect:outcomingOrders";
+        return "redirect:outgoingOrders";
     }
 
     @GetMapping(path = "/waitingOrders")

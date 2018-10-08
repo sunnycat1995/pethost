@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderDboDtoConverter implements DboDtoConverter<OrderDbo, OrderDto>{
     @Override
-    public OrderDto convertToDto(final OrderDbo orderDbo) {
-        return null;
+    public OrderDto convertToDto(final OrderDbo dbo) {
+        final OrderDto dto = new OrderDto();
+        dto.setId(dbo.getId());
+        dto.setComments(dbo.getComments());
+        return dto;
     }
 
     @Override
-    public OrderDbo convertToDbo(final OrderDto orderDto) {
+    public OrderDbo convertToDbo(final OrderDto dto) {
         final OrderDbo dbo = new OrderDbo();
-        dbo.setId(orderDto.getId());
+        dbo.setId(dto.getId());
+        dbo.setComments(dto.getComments());
         return dbo;
     }
 }
