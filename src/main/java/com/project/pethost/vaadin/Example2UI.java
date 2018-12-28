@@ -39,10 +39,10 @@ import java.util.stream.Collectors;
 
 		final List<Email>[] emails = new List[1];
 		emails[0] = Arrays.asList(email1, email2, email3);
-		final BeanItemContainer[] container = { new BeanItemContainer(Email.class, emails[0]) };
+		final BeanItemContainer container = new BeanItemContainer(Email.class, emails[0]);
 
 		final Grid grid = new Grid();
-		grid.setContainerDataSource(container[0]);
+		grid.setContainerDataSource(container);
 		grid.setColumnOrder("date", "name", "message", "recipients");
 		final Grid.Column recipients = grid.getColumn("recipients");
 		recipients.setConverter(new StringToListConverter());
@@ -53,9 +53,8 @@ import java.util.stream.Collectors;
 		final Button addButton = new Button("Add", e -> {
 			final Window window = new Window("New email");
 
-			final EmailForm emailForm = new EmailForm(new Email("", "", new ArrayList<>(), LocalDate.now()), () -> {
-				window.close();
-			});
+			final EmailForm emailForm = new EmailForm(new Email("", "", new ArrayList<>(), LocalDate.now()),
+					window::close);
 			window.setContent(emailForm);
 			window.addCloseListener(listener -> grid.refreshAllRows());
 			window.setSizeFull();
@@ -65,21 +64,12 @@ import java.util.stream.Collectors;
 		final Button editButton = new Button("Edit");
 		editButton.setEnabled(false);
 		editButton.addClickListener(e -> {
-
-			final Collection<Object> selectedRows = grid.getSelectedRows();
-			if (!selectedRows.isEmpty()) {
-				selectedRows.forEach(selectedRow -> {
-					final Optional<Email> first = emails[0].stream().filter(el -> el.equals(selectedRow)).findFirst();
-					first.ifPresent(email -> emails[0] = emails[0].stream()
-							.filter(el -> !el.equals(selectedRow))
-							.collect(Collectors.toList()));
-					final Window window = new Window("EmailForm");
-					final EmailForm emailForm = new EmailForm(first.get(), window::close);
-					window.setContent(emailForm);
-					window.setSizeFull();
-					this.addWindow(window);
-				});
-			}
+			final Email email = (Email) grid.getSelectedRows().iterator().next();
+			final Window window = new Window("EmailForm");
+			final EmailForm emailForm = new EmailForm(email, window::close);
+			window.setContent(emailForm);
+			window.setSizeFull();
+			this.addWindow(window);
 
 		});
 
@@ -114,10 +104,6 @@ import java.util.stream.Collectors;
 
 		final HorizontalLayout buttonsLayout = new HorizontalLayout(addButton, editButton, deleteButton);
 		final VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
-
-		final StringListField stringListField = new StringListField();
-
-		layout.addComponent(stringListField);
 
 		setContent(layout);
 	}
