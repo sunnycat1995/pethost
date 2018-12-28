@@ -14,6 +14,10 @@ import java.util.List;
 public class StringListField extends CustomField<List<String>> {
     private VerticalLayout layout = new VerticalLayout();
 
+    /*public StringListField(final String caption) {
+        setCaption(caption);
+    }*/
+
     @Override
     protected Component initContent() {
         final GridLayout gridLayout = new GridLayout(1, 2);
