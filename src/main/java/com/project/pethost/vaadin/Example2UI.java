@@ -68,6 +68,7 @@ import java.util.stream.Collectors;
 			final Window window = new Window("EmailForm");
 			final EmailForm emailForm = new EmailForm(email, window::close);
 			window.setContent(emailForm);
+			window.addCloseListener(listener -> grid.refreshAllRows());
 			window.setSizeFull();
 			this.addWindow(window);
 
