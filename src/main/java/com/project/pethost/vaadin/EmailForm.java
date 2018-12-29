@@ -2,9 +2,9 @@ package com.project.pethost.vaadin;
 
 import com.project.pethost.vaadin.component.LocalDateField;
 import com.vaadin.annotations.Theme;
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
@@ -28,7 +28,7 @@ public class EmailForm extends Panel {
     @PropertyId("date")
     private LocalDateField dateField = new LocalDateField();
 
-    private final BeanFieldGroup<Email> emailFieldGroup = new BeanFieldGroup<>(Email.class);
+    private final FieldGroup emailFieldGroup = new FieldGroup();
     private Runnable notifyOk;
 
     private Button save = new Button("Save");
@@ -59,7 +59,7 @@ public class EmailForm extends Panel {
         final HorizontalLayout buttonsLayout = new HorizontalLayout(save, cancel);
         final VerticalLayout verticalLayout =
             new VerticalLayout(nameTextField, messageTextField, recipientsField, dateField, buttonsLayout);
-        emailFieldGroup.setItemDataSource(email);
+        emailFieldGroup.setItemDataSource(new BeanItem<Email>(email));
         emailFieldGroup.bindMemberFields(this);
         setContent(verticalLayout);
     }

@@ -10,15 +10,22 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class LocalDateField extends CustomField<LocalDate> {
-    @Override
-    protected Component initContent() {
-        return new DateField("", Date.from(getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-    }
+	@Override protected Component initContent() {
+		final DateField dateField = new DateField("",
+				Date.from(getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+		dateField.addValueChangeListener(valueChangeEvent -> {
+			setValue(convertToLocalDate(valueChangeEvent.getProperty().getValue()));
+		});
+		return dateField;
+	}
 
-    @Override
-    public Class<? extends LocalDate> getType() {
-        return LocalDate.class;
-    }
+	private LocalDate convertToLocalDate(final Object value) {
+		return ((Date) value).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	@Override public Class<? extends LocalDate> getType() {
+		return LocalDate.class;
+	}
 
 	@Override public LocalDate getValue() {
 		return super.getValue();

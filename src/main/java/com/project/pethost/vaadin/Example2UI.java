@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @SpringUI(path = "vaadin2") @Theme("valo") public class Example2UI extends UI {
 	@Override protected void init(final VaadinRequest vaadinRequest) {
@@ -53,6 +51,7 @@ import java.util.stream.Collectors;
 		final Button addButton = new Button("Add", e -> {
 			final Window window = new Window("New email");
 			final Email email = new Email("", "", new ArrayList<>(), LocalDate.now());
+			container.addItem(email);
 			addWindow(grid, window, email);
 		});
 
@@ -66,17 +65,12 @@ import java.util.stream.Collectors;
 
 		final Button deleteButton = new Button("Remove", e -> {
 			final Collection<Object> selectedRows = grid.getSelectedRows();
-			if (!selectedRows.isEmpty()) {
-				selectedRows.forEach(selectedRow -> {
-					final Optional<Email> first = emails[0].stream().filter(el -> el.equals(selectedRow)).findFirst();
-					first.ifPresent(email -> emails[0] = emails[0].stream()
-							.filter(el -> !el.equals(selectedRow))
-							.collect(Collectors.toList()));
-				});
-				final BeanItemContainer container1 = new BeanItemContainer(Email.class, emails[0]);
-				grid.setContainerDataSource(container1);
-				grid.refreshAllRows();
-			}
+
+			selectedRows.forEach(selectedRow -> {
+				container.removeItem(selectedRow);
+			});
+			grid.refreshAllRows();
+
 		});
 		deleteButton.setEnabled(false);
 		grid.addSelectionListener(e -> {
@@ -102,7 +96,10 @@ import java.util.stream.Collectors;
 	private void addWindow(final Grid grid, final Window window, final Email email) {
 		final EmailForm emailForm = new EmailForm(email, window::close);
 		window.setContent(emailForm);
-		window.addCloseListener(listener -> grid.refreshAllRows());
+		window.setClosable(false);
+		window.addCloseListener(listener -> {
+			grid.refreshAllRows();
+		});
 		window.setSizeFull();
 		this.addWindow(window);
 	}

@@ -26,11 +26,11 @@ import java.util.List;
 		final GridLayout gridLayout = new GridLayout(1, 2);
 		gridLayout.addComponent(layout);
 
-		List<String> list = getValue(); // как вот эта штука работает??
+		List<String> list = getValue();
 		if (list == null) {
 			list = new ArrayList<>();
 		}
-		setInitialValue(list);
+		redraw(list);
 
 		final Button button = new Button("Add recipient", this::addItem);
 		gridLayout.addComponent(button);
@@ -45,6 +45,7 @@ import java.util.List;
 		}
 		list.add("");
 		setValue(list);
+		redraw(list);
 	}
 
 	@SuppressWarnings("unchecked") @Override public Class<? extends List<String>> getType() {
@@ -58,28 +59,8 @@ import java.util.List;
 		return super.getValue();
 	}
 
-	@Override public void setValue(final List<String> list) throws ReadOnlyException, Converter.ConversionException {
-		final List<String> copyList = new ArrayList<>(list);
-
-		final TextField textField = new TextField();
-		final int lastIndex = copyList.size() - 1;
-		textField.setValue(copyList.get(lastIndex));
-
-		final Button removeButton = new Button("Remove");
-		final HorizontalLayout horizontalLayout = new HorizontalLayout(textField, removeButton);
-		removeButton.addClickListener(e -> {
-			final TextField participant = (TextField) horizontalLayout.getComponent(0);
-			list.remove(participant.getValue());
-			layout.removeComponent(horizontalLayout);
-		});
-		layout.addComponent(horizontalLayout);
-
-		textField.addValueChangeListener(valueChange -> {
-			list.set(lastIndex, textField.getValue());
-		});
-	}
-
-	public void setInitialValue(final List<String> list) throws ReadOnlyException, Converter.ConversionException {
+	public void redraw(final List<String> list) throws ReadOnlyException, Converter.ConversionException {
+		layout.removeAllComponents();
 		final List<String> copyList = new ArrayList<>(list);
 		for (int i = 0; i < copyList.size(); ++i) {
 			final TextField textField = new TextField();
@@ -87,15 +68,17 @@ import java.util.List;
 
 			final int finalI = i;
 			textField.addValueChangeListener(valueChange -> {
-				list.set(finalI, textField.getValue());
+				copyList.set(finalI, textField.getValue());
+				setValue(copyList);
 			});
 
 			final Button removeButton = new Button("Remove");
 			final HorizontalLayout horizontalLayout = new HorizontalLayout(textField, removeButton);
 			removeButton.addClickListener(e -> {
 				final TextField participant = (TextField) horizontalLayout.getComponent(0);
-				list.remove(participant.getValue());
+				copyList.remove(participant.getValue());
 				layout.removeComponent(horizontalLayout);
+				setValue(copyList);
 			});
 			removeButton.addClickListener(e -> layout.removeComponent(horizontalLayout));
 			layout.addComponent(horizontalLayout);
