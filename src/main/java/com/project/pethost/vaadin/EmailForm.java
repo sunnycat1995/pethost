@@ -14,6 +14,8 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import java.time.LocalDate;
+
 @SpringUI(path = "vaadin5")
 @Theme("valo")
 public class EmailForm extends Panel {
@@ -50,10 +52,13 @@ public class EmailForm extends Panel {
     private void fillEmailForm(final Email email) {
         recipientsField.setCaption("Recipients");
         dateField.setCaption("Date");
+        dateField.addValueChangeListener(e -> {
+            final LocalDate localDate = (LocalDate) e.getProperty().getValue();
+            email.setDate(localDate);
+        });
         final HorizontalLayout buttonsLayout = new HorizontalLayout(save, cancel);
         final VerticalLayout verticalLayout =
             new VerticalLayout(nameTextField, messageTextField, recipientsField, dateField, buttonsLayout);
-
         emailFieldGroup.setItemDataSource(email);
         emailFieldGroup.bindMemberFields(this);
         setContent(verticalLayout);

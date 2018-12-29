@@ -52,13 +52,8 @@ import java.util.stream.Collectors;
 
 		final Button addButton = new Button("Add", e -> {
 			final Window window = new Window("New email");
-
-			final EmailForm emailForm = new EmailForm(new Email("", "", new ArrayList<>(), LocalDate.now()),
-					window::close);
-			window.setContent(emailForm);
-			window.addCloseListener(listener -> grid.refreshAllRows());
-			window.setSizeFull();
-			this.addWindow(window);
+			final Email email = new Email("", "", new ArrayList<>(), LocalDate.now());
+			addWindow(grid, window, email);
 		});
 
 		final Button editButton = new Button("Edit");
@@ -66,12 +61,7 @@ import java.util.stream.Collectors;
 		editButton.addClickListener(e -> {
 			final Email email = (Email) grid.getSelectedRows().iterator().next();
 			final Window window = new Window("EmailForm");
-			final EmailForm emailForm = new EmailForm(email, window::close);
-			window.setContent(emailForm);
-			window.addCloseListener(listener -> grid.refreshAllRows());
-			window.setSizeFull();
-			this.addWindow(window);
-
+			addWindow(grid, window, email);
 		});
 
 		final Button deleteButton = new Button("Remove", e -> {
@@ -107,5 +97,13 @@ import java.util.stream.Collectors;
 		final VerticalLayout layout = new VerticalLayout(grid, buttonsLayout);
 
 		setContent(layout);
+	}
+
+	private void addWindow(final Grid grid, final Window window, final Email email) {
+		final EmailForm emailForm = new EmailForm(email, window::close);
+		window.setContent(emailForm);
+		window.addCloseListener(listener -> grid.refreshAllRows());
+		window.setSizeFull();
+		this.addWindow(window);
 	}
 }
