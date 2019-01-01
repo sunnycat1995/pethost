@@ -1,6 +1,7 @@
 package com.project.pethost.vaadin;
 
 import com.project.pethost.vaadin.component.LocalDateField;
+import com.vaadin.annotations.Theme;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.PropertyId;
 import com.vaadin.data.util.BeanItem;
@@ -14,6 +15,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import java.time.LocalDate;
 
+@Theme("myformtheme")
 public class EmailForm extends CustomComponent {
 	public final static String NAME = "email";
 
@@ -31,8 +33,6 @@ public class EmailForm extends CustomComponent {
 
 	private Button save = new Button("Save");
 	private Button cancel = new Button("Cancel");
-
-	public EmailForm() {}
 
 	public EmailForm(final Email email, final Runnable onSaveOrDiscard) {
 		this.notifyOk = onSaveOrDiscard;
@@ -59,6 +59,7 @@ public class EmailForm extends CustomComponent {
 				new VerticalLayout(nameTextField, messageTextField, recipientsField, dateField, buttonsLayout);
 		emailFieldGroup.setItemDataSource(new BeanItem<Email>(email));
 		emailFieldGroup.bindMemberFields(this);
+		addStyleName("email-form");
 		setCompositionRoot(verticalLayout);
 	}
 

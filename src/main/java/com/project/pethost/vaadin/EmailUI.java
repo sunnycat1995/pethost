@@ -8,7 +8,7 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.UI;
 
 @SpringUI(path = "vaadin5")
-@Theme("valo")
+@Theme("mytheme")
 public class EmailUI extends UI {
 
     private final SpringViewProvider springViewProvider;

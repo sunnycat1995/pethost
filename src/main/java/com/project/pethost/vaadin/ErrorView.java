@@ -11,7 +11,8 @@ import com.vaadin.ui.VerticalLayout;
 
 import java.io.File;
 
-@SpringView(name = ErrorView.NAME) public class ErrorView extends CustomComponent implements View {
+@SpringView(name = ErrorView.NAME)
+public class ErrorView extends CustomComponent implements View {
 	public static final String NAME = "error";
 
 	@Override public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {

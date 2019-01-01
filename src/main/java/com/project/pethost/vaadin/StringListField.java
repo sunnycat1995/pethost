@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SpringUI(path = "vaadin4") @Theme("valo") public class StringListField extends CustomField<List<String>> {
+@SpringUI(path = "vaadin4") @Theme("mytheme") public class StringListField extends CustomField<List<String>> {
 	private VerticalLayout layout = new VerticalLayout();
 
     /*public StringListField(final String caption) {
@@ -43,8 +43,9 @@ import java.util.List;
 		if (list == null) {
 			list = new ArrayList<>();
 		}
-		list.add("");
-		setValue(list);
+		final List<String> copyList = new ArrayList<>(list);
+		copyList.add("");
+		setValue(copyList);
 		redraw(list);
 	}
 

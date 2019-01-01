@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-@SpringView(name = EmailForm.NAME) @Theme("valo") public class EmailView extends CustomComponent implements View {
+@SpringView(name = EmailForm.NAME) @Theme("mytheme") public class EmailView extends CustomComponent implements View {
 
 	@Override public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 		{
@@ -54,7 +54,7 @@ import java.util.List;
 			final Button addButton = new Button("Add", e -> {
 				final Window window = new Window("New email");
 				final Email email = new Email("", "", new ArrayList<>(), LocalDate.now());
-				container.addItem(email);
+				container.addItem(email); //TODO fix cancel button
 				addWindow(grid, window, email);
 			});
 

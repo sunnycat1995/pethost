@@ -10,7 +10,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.UUID;
 
 @SpringUI(path = "vaadin1")
-@Theme("valo")
+@Theme("mytheme")
 public class Example1UI extends UI {
     @Override
     protected void init(final VaadinRequest vaadinRequest) {
